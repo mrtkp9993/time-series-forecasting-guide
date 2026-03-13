@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Time Series Forecasting Workflow</title>
+		<meta name="description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
+		<meta name="author" content="Murat Koptur" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --bg: #f6f2e9;
+                --bg-accent: #efe6d6;
+                --ink: #1f1d1a;
+                --muted: #6a6257;
+                --card: #fffcf6;
+                --line: #d9cfbe;
+                --brand: #ba4a22;
+                --brand-soft: #f4d6c8;
+                --shadow: 0 12px 30px rgba(31, 29, 26, 0.08);
+                --radius: 16px;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: "Space Grotesk", sans-serif;
+                color: var(--ink);
+                background:
+                    radial-gradient(
+                        circle at 10% 5%,
+                        #fff8eb 0%,
+                        transparent 35%
+                    ),
+                    radial-gradient(
+                        circle at 92% 12%,
+                        #f9e4d9 0%,
+                        transparent 30%
+                    ),
+                    linear-gradient(135deg, var(--bg) 0%, var(--bg-accent) 100%);
+                min-height: 100vh;
+                line-height: 1.55;
+                padding: 2.25rem 1.2rem 3rem;
+            }
+
+            .wrap {
+                max-width: 1100px;
+                margin: 0 auto;
+                display: grid;
+                gap: 1.2rem;
+            }
+
+            .hero,
+            .card {
+                background: color-mix(in srgb, var(--card) 95%, white 5%);
+                border: 1px solid var(--line);
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+            }
+
+            .hero {
+                padding: 1.5rem 1.3rem;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: auto -50px -70px auto;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: radial-gradient(
+                    circle at center,
+                    var(--brand-soft) 0%,
+                    transparent 68%
+                );
+                pointer-events: none;
+            }
+
+            h1,
+            h2 {
+                margin: 0;
+                letter-spacing: -0.02em;
+            }
+
+            h1 {
+                font-size: clamp(1.7rem, 4vw, 2.5rem);
+                line-height: 1.15;
+            }
+
+            .sub {
+                margin: 0.7rem 0 0;
+                color: var(--muted);
+                max-width: 70ch;
+                font-family: "Source Serif 4", serif;
+                font-size: 1.06rem;
+            }
+
+            .card {
+                padding: 1.1rem;
+                animation: rise 0.55s ease both;
+            }
+
+            .card:nth-of-type(2) {
+                animation-delay: 0.08s;
+            }
+
+            .card:nth-of-type(3) {
+                animation-delay: 0.16s;
+            }
+
+            .card:nth-of-type(4) {
+                animation-delay: 0.24s;
+            }
+
+    h2 {
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      margin-bottom: 0.7rem;
+      color: #2f2a24;
+    }
+
+    .details {
+      margin: 0.75rem 0 0.35rem;
+      padding-left: 1.1rem;
+    }
+
+    .details li {
+      margin: 0.38rem 0;
+    }
+
+    .details strong {
+      color: #2b221b;
+    }
+
+            .mermaid {
+                background: #fffdf9;
+                border: 1px solid #e8ddcc;
+                border-radius: 12px;
+                padding: 0.5rem;
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                border-radius: 10px;
+                overflow: hidden;
+                font-size: 0.96rem;
+            }
+
+            th,
+            td {
+                padding: 0.66rem 0.7rem;
+                border-bottom: 1px solid #e7dece;
+                text-align: left;
+                vertical-align: top;
+            }
+
+            th {
+                background: #f7eee2;
+                color: #3d3228;
+                font-weight: 600;
+            }
+
+            tbody tr:nth-child(odd) {
+                background: #fffcf8;
+            }
+
+            tbody tr:nth-child(even) {
+                background: #fff8ef;
+            }
+
+            a {
+                color: var(--brand);
+                text-decoration-thickness: 1.5px;
+                text-underline-offset: 2px;
+            }
+
+            .contact {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.7rem;
+                flex-wrap: wrap;
+                font-size: 0.95rem;
+            }
+
+            .contact span {
+                color: var(--muted);
+            }
+
+            @keyframes rise {
+                from {
+                    opacity: 0;
+                    transform: translateY(8px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @media (max-width: 720px) {
+                body {
+                    padding-top: 1.2rem;
+                }
+
+                .hero,
+                .card {
+                    border-radius: 13px;
+                }
+
+                .card {
+                    padding: 0.85rem;
+                }
+
+                th,
+                td {
+                    padding: 0.55rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="wrap">
+            <section class="hero">
+                <h1>Time Series Forecasting Workflow</h1>
+                <p class="sub">
+                    A practical flowchart for model design, diagnostics, and
+                    selection for time series forecasting problems.
+                </p>
+            </section>
+
+            <section class="card">
+                <h2>Core Workflow</h2>
+                <div class="mermaid">
+flowchart TD					
+    A[Define problem] --> D[Initial EDA]
+    D --> E{Problem structure?}
+
+    E -->|One target series| F[Univariate branch]
+    E -->|Multiple target series| G[Multivariate branch]
+    E -->|One target with exogenous inputs| H[Dynamic regression branch]
+
+    F --> K[Fit benchmarks and candidates]
+    G --> K
+    H --> K
+
+    K --> L[Residual and stability diagnostics]
+    L --> M{Diagnostics adequate?}
+
+    M -->|No| N[Respecify model]
+    N --> K
+
+    M -->|Yes| O[Time-series cross-validation]
+    O --> P[Forecast evaluation]
+    P --> Q{Best parsimonious model?}
+
+    Q -->|No| K
+    Q -->|Yes| S[Finalize forecast]
+</div>
+            </section>
+
+    <section class="card">
+      <h2>Diagnostics &amp; Model Selection</h2>
+      <div class="mermaid">
+flowchart TD
+    B{Problem structure}
+
+    %% Univariate
+    B --> |Univariate| U1[Trend and stationarity]
+    U1 --> U2[Seasonality checks]
+    U2 --> U3[Variance diagnostics]
+    U3 --> U4[Breaks and interventions]
+    U4 --> U5[Special dependence checks]
+    U5 --> Z[Candidate model list]
+
+    %% Multivariate
+    B -->|Multivariate| M0[System diagnostics]
+    M0 --> M1{Integrated?}
+    M1 -->|No| M2[VAR]
+    M1 -->|Yes| M3[Cointegration tests]
+    M3 --> M4{Cointegrated?}
+    M4 -->|Yes| M5[VECM]
+    M4 -->|No| M2[VAR in differences / differenced VAR]
+    M2 --> Z
+    M5 --> Z
+
+    %% Dynamic regression
+    B -->|Exogenous inputs| X0[Input-output diagnostics]
+    X0 --> X3{Regression form}
+    X3 -->|Lagged regressors| X4[ARDL / UECM / ECM]
+    X3 -->|Regression with ARMA errors / ARIMAX| X5[ARIMAX / dynamic regression]
+    X4 --> Z
+    X5 --> Z
+      </div>
+      <ul class="details">
+        <li><strong>Trend and stationarity:</strong> ADF, PP, KPSS, break-point unit-root tests</li>
+        <li><strong>Seasonality:</strong> seasonal dummies, seasonal plots, seasonal unit-root tests</li>
+        <li><strong>Variance:</strong> log/Box-Cox, ARCH-LM, squared residual checks</li>
+        <li><strong>Breaks and interventions:</strong> Chow, Zivot-Andrews, Bai-Perron, intervention dummies</li>
+        <li><strong>Special dependence:</strong> long memory, threshold effects, regime changes, nonlinear dynamics</li>
+        <li><strong>Input-output diagnostics:</strong> lag inspection, prewhitened Cross-Correlation Function (CCF), intervention and transfer effects</li>
+      </ul>
+    </section>
+
+            <section class="card">
+                <h2>Model Family Selection</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Condition</th>
+                            <th>Candidate models</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Stationary linear</td>
+                            <td>AR / MA / ARMA</td>
+                        </tr>
+                        <tr>
+                            <td>Trend / nonstationary</td>
+                            <td>ARIMA</td>
+                        </tr>
+                        <tr>
+                            <td>Seasonal</td>
+                            <td>SARIMA / ETS</td>
+                        </tr>
+                        <tr>
+                            <td>Exogenous inputs</td>
+                            <td>ARDL / ARIMAX / MIDAS</td>
+                        </tr>
+                        <tr>
+                            <td>Multivariate</td>
+                            <td>VAR / VECM</td>
+                        </tr>
+                        <tr>
+                            <td>Changing variance</td>
+                            <td>ARCH / GARCH / stochastic volatility</td>
+                        </tr>
+                        <tr>
+                            <td>Long memory</td>
+                            <td>ARFIMA / FIGARCH</td>
+                        </tr>
+                        <tr>
+                            <td>Nonlinear / regime</td>
+                            <td>TAR / SETAR / STAR / Markov switching</td>
+                        </tr>
+                        <tr>
+                            <td>Latent components</td>
+                            <td>
+                                State-space / structural time series / Kalman
+                                filter
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="card contact">
+                <span>Contact</span>
+                <div>
+                    <a
+                        href="https://www.linkedin.com/in/muratkoptur/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >LinkedIn</a
+                    >
+                    |
+                    <a
+                        href="https://muratkoptur.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >muratkoptur.com</a
+                    >
+                </div>
+            </section>
+        </main>
+
+        <script type="module">
+            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+            mermaid.initialize({
+                startOnLoad: true,
+                securityLevel: "loose",
+                theme: "base",
+                themeVariables: {
+                    primaryColor: "#fff6e9",
+                    primaryBorderColor: "#cf7b4f",
+                    primaryTextColor: "#221f1b",
+                    lineColor: "#99502d",
+                    secondaryColor: "#fceadd",
+                    tertiaryColor: "#fff9f3",
+                    fontFamily: "Space Grotesk",
+                },
+            });
+        </script>
+    </body>
+</html>

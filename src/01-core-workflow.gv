@@ -1,0 +1,44 @@
+digraph TimeSeriesWorkflow {
+    rankdir=TB;
+  graph [splines=ortho, nodesep=1]
+  node [shape=box]
+
+    A [label="Define problem"];
+    D [label="Initial EDA"];
+    E [label="Problem structure?", shape=diamond, style="filled", fillcolor="#FFF7ED"];
+    F [label="Univariate branch"];
+    G [label="Multivariate branch"];
+    H [label="Dynamic regression branch"];
+    K [label="Fit benchmarks and candidates"];
+    L [label="Residual and stability diagnostics"];
+    M [label="Diagnostics adequate?", shape=diamond, style="filled", fillcolor="#FFF7ED"];
+    N [label="Respecify model"];
+    O [label="Time-series cross-validation"];
+    P [label="Forecast evaluation"];
+    Q [label="Best parsimonious model?", shape=diamond, style="filled", fillcolor="#FFF7ED"];
+    S [label="Finalize forecast"];
+
+    A -> D;
+    D -> E;
+
+    E -> F [label="One target series"];
+    E -> G [label="Multiple target series"];
+    E -> H [label="One target with exogenous inputs"];
+
+    F -> K;
+    G -> K;
+    H -> K;
+
+    K -> L;
+    L -> M;
+
+    M -> N [label="No"];
+    N -> K;
+
+    M -> O [label="Yes"];
+    O -> P;
+    P -> Q;
+
+    Q -> K [label="No"];
+    Q -> S [label="Yes"];
+}

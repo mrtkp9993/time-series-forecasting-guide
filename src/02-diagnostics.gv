@@ -1,0 +1,62 @@
+digraph TimeSeriesWorkflow {
+    rankdir=TB;
+    graph [splines=ortho, nodesep=0.5, ranksep=0.7];
+    node [shape=box, style="rounded,filled", fillcolor="#f8f9fa", color="#444444", fontname="Helvetica"];
+    edge [fontname="Helvetica", color="#444444"];
+
+    B  [label="Problem structure", shape=diamond, fillcolor="#fff3cd"];
+
+    // Univariate
+    U1 [label="Trend and stationarity"];
+    U2 [label="Seasonality checks"];
+    U3 [label="Variance diagnostics"];
+    U4 [label="Breaks and interventions"];
+    U5 [label="Special dependence checks"];
+
+    // Multivariate
+    M0 [label="System diagnostics"];
+    M1 [label="Integrated?", shape=diamond, fillcolor="#fff3cd"];
+    M2 [label="VAR in differences / differenced VAR"];
+    M3 [label="Cointegration tests"];
+    M4 [label="Cointegrated?", shape=diamond, fillcolor="#fff3cd"];
+    M5 [label="VECM"];
+
+    // Dynamic regression
+    X0 [label="Input-output diagnostics"];
+    X3 [label="Regression form", shape=diamond, fillcolor="#fff3cd"];
+    X4 [label="ARDL / UECM / ECM"];
+    X5 [label="ARIMAX / dynamic regression"];
+    X7 [label="MIDAS"];
+
+    // Final
+    Z  [label="Candidate model list", fillcolor="#e8f5e9"];
+
+    // Main branches
+    B -> U1 [label="Univariate"];
+    B -> M0 [label="Multivariate"];
+    B -> X0 [label="Exogenous inputs"];
+
+    // Univariate flow
+    U1 -> U2;
+    U2 -> U3;
+    U3 -> U4;
+    U4 -> U5;
+    U5 -> Z;
+
+    // Multivariate flow
+    M0 -> M1;
+    M1 -> M2 [label="No"];
+    M1 -> M3 [label="Yes"];
+    M3 -> M4;
+    M4 -> M5 [label="Yes"];
+    M4 -> M2 [label="No"];
+    M2 -> Z;
+    M5 -> Z;
+
+    // Dynamic regression flow
+    X0 -> X3;
+    X3 -> X4 [label="Lagged regressors"];
+    X3 -> X5 [label="Regression with ARMA errors / ARIMAX"];
+    X4 -> Z;
+    X5 -> Z;
+}
