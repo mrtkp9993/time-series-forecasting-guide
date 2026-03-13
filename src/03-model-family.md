@@ -7,7 +7,7 @@
 | Stationary linear      | AR / MA / ARMA                                       |
 | Trend / nonstationary  | ARIMA                                                |
 | Seasonal               | SARIMA / ETS                                         |
-| Exogenous inputs       | ARDL / ARIMAX /            MIDAS                     |
+| Exogenous inputs       | ARDL / ARIMAX                                        |
 | Multivariate           | VAR / VECM                                           |
 | Changing variance      | ARCH / GARCH / stochastic volatility                 |
 | Long memory            | ARFIMA / FIGARCH                                     |
