@@ -65,17 +65,21 @@ flowchart TD
 
 ## Model family selection
 
-| Condition              | Candidate models                                     |
-| ---------------------- | ---------------------------------------------------- |
-| Stationary linear      | AR / MA / ARMA                                       |
-| Trend / nonstationary  | ARIMA                                                |
-| Seasonal               | SARIMA / ETS                                         |
-| Exogenous inputs       | ARDL / ARIMAX                                        |
-| Multivariate           | VAR / VECM                                           |
-| Changing variance      | ARCH / GARCH / stochastic volatility                 |
-| Long memory            | ARFIMA / FIGARCH                                     |
-| Nonlinear / regime     | TAR / SETAR / STAR / Markov switching                |
-| Latent components      | State-space / structural time series / Kalman filter |
+| Model family condition | Candidate models                                                                             |
+| ---------------------- | ----------------------------------------------------                                         |
+| Stationary linear      | AR / MA / ARMA                                                                               |
+| Trend / nonstationary  | ARIMA                                                                                        |
+| Seasonal               | SARIMA / ETS                                                                                 |
+| Multiple seasonality   | TBATS / MSTL                                                                                 |
+| Exogenous inputs       | ARDL / ARIMAX                                                                                |
+| Multivariate           | VAR / VECM                                                                                   |
+| Changing variance      | ARCH / GARCH / stochastic volatility / Generalized Autoregressive Score (GAS)                |
+| Long memory            | ARFIMA / FIGARCH                                                                             |
+| Nonlinear / regime switching | TAR / SETAR / STAR / Markov switching                                                  |
+| Nonlinear ML           | Neural network autoregression (NNAR)                                                         |
+| Latent components      | State-space / structural time series / Kalman filter                                         |
+| Mixed frequency        | MIDAS                                                                                        |
+| Intermittent demand    | Croston's method / TSB                                                                       |
 
 ## Contact
 
