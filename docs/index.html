@@ -455,6 +455,33 @@
                 }
             }
 
+            /* ---------- print control ---------- */
+
+            .mast-tools {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .tool {
+                font-family: var(--tech);
+                font-size: 0.6875rem;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--ink-dim);
+                background: transparent;
+                border: 1px solid var(--rule);
+                border-radius: 0;
+                padding: 0.5rem 0.9rem;
+                cursor: pointer;
+                transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+            }
+
+            .tool:hover {
+                color: var(--signal);
+                border-color: var(--signal);
+                background: var(--film-2);
+            }
+
             /* ---------- narrow ---------- */
 
             @media (max-width: 900px) {
@@ -502,6 +529,125 @@
                     margin-bottom: 0.2rem;
                 }
             }
+            /* ---------- print: one sheet per page ---------- */
+
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+
+            /* the wide diagnostics sheet earns a landscape page */
+            @page land {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+
+            @media print {
+                html,
+                body {
+                    background: #fff;
+                }
+
+                .noprint,
+                .pan-hint,
+                footer .foot-links {
+                    display: none !important;
+                }
+
+                /* the drawings must be finished, not mid-animation */
+                .js .reveal .wire {
+                    stroke-dasharray: none;
+                    stroke-dashoffset: 0;
+                }
+                .js .reveal .fadein {
+                    opacity: 1;
+                    transform: none;
+                }
+                .js .reveal.in .wire,
+                .js .reveal.in .fadein {
+                    animation: none;
+                }
+
+                .sheetstack {
+                    max-width: none;
+                    padding: 0;
+                }
+
+                header.mast {
+                    padding: 0 0 6mm;
+                }
+
+                h1 {
+                    font-size: 3.2rem;
+                    margin-top: 0;
+                }
+
+                .lede {
+                    font-size: 1rem;
+                }
+
+                /* each drawing sheet gets its own page */
+                .sec {
+                    break-before: page;
+                    margin-top: 0;
+                }
+
+                .sec-head {
+                    margin-bottom: 4mm;
+                }
+
+                .plate,
+                .notes,
+                .schedule,
+                footer {
+                    break-inside: avoid;
+                }
+
+                /* keep the oxblood sheets — they are the drawing, not decoration */
+                .plate,
+                thead th,
+                footer {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                .plate {
+                    padding: 8mm;
+                }
+
+                .canvas {
+                    overflow: visible !important;
+                }
+
+                .canvas svg {
+                    width: auto !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                    max-height: 232mm;
+                    height: auto;
+                }
+
+                .sec-land {
+                    page: land;
+                }
+
+                .sec-land .canvas svg {
+                    max-height: 158mm;
+                }
+
+                .notes ul {
+                    columns: 2;
+                }
+
+                a {
+                    border-bottom: 0;
+                }
+
+                footer {
+                    margin-top: 8mm;
+                }
+            }
+
         </style>
     </head>
     <body>
@@ -525,6 +671,9 @@
 
         <div class="sheetstack">
             <header class="mast">
+                <div class="mast-tools noprint">
+                    <button type="button" id="printbtn" class="tool">Print / PDF</button>
+                </div>
                 <h1>Time Series <span class="thin">Forecasting</span> Workflow</h1>
                 <p class="lede">
                     A practical flowchart for model design, diagnostics, and
@@ -740,7 +889,7 @@
             </section>
 
             <!-- ============================= SHEET 02 ============================= -->
-            <section class="sec">
+            <section class="sec sec-land">
                 <div class="sec-head">
                     <h2>Diagnostics &amp; Model Selection</h2>
                 </div>
@@ -1156,6 +1305,31 @@
                 });
 
                 var plates = document.querySelectorAll(".reveal");
+
+                // printing must never catch a drawing mid-draw
+                function settle() {
+                    plates.forEach(function (p) {
+                        p.classList.add("in");
+                    });
+                }
+                window.addEventListener("beforeprint", settle);
+                if (window.matchMedia) {
+                    var mq = window.matchMedia("print");
+                    if (mq.addEventListener) {
+                        mq.addEventListener("change", function (e) {
+                            if (e.matches) settle();
+                        });
+                    }
+                }
+
+                var btn = document.getElementById("printbtn");
+                if (btn) {
+                    btn.addEventListener("click", function () {
+                        settle();
+                        window.print();
+                    });
+                }
+
                 if (!("IntersectionObserver" in window)) {
                     plates.forEach(function (p) {
                         p.classList.add("in");
