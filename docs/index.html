@@ -217,8 +217,8 @@
 
             #dwg-02 {
                 width: 100%;
-                max-width: 1160px;
-                min-width: 1000px;
+                max-width: 1400px;
+                min-width: 1120px;
             }
 
             /* ---------- drawing typography (inside svg) ---------- */
@@ -751,7 +751,7 @@
                         <svg
                             id="dwg-02"
                             class="reveal"
-                            viewBox="0 0 1160 1048"
+                            viewBox="0 0 1400 1068"
                             role="img"
                             aria-labelledby="dwg02-title dwg02-desc"
                         >
@@ -761,8 +761,11 @@
                                 trend and stationarity, seasonality, variance, breaks and interventions, and special
                                 dependence checks. The multivariate track runs system diagnostics, then tests whether the
                                 system is integrated and cointegrated to choose between VAR and VECM. The exogenous-input
-                                track runs input-output diagnostics, then picks between an ARDL-type model with lagged
-                                regressors and ARIMAX dynamic regression. All tracks end at a candidate model list.
+                                track runs input-output diagnostics, then picks between ARIMAX dynamic regression and a
+                                lagged-regressor path that rules out ARDL when any variable is I(2), otherwise runs lag
+                                selection and a UECM bounds test, giving an ARDL long-run model with ECM when
+                                cointegrated and short-run differences when not. All tracks end at a candidate model
+                                list.
                             </desc>
 
                             <defs>
@@ -785,14 +788,14 @@
                                 <!-- fan from the hub -->
                                 <path class="wire" pathLength="1" d="M392 96 H164 a8 8 0 0 0 -8 8 V200" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.05s" />
                                 <path class="wire" pathLength="1" d="M520 144 V200" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.05s" />
-                                <path class="wire" pathLength="1" d="M648 96 H842 a8 8 0 0 1 8 8 V200" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.05s" />
+                                <path class="wire" pathLength="1" d="M648 96 H972 a8 8 0 0 1 8 8 V200" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.05s" />
 
                                 <!-- univariate chain -->
                                 <path class="wire" pathLength="1" d="M156 256 V280" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.18s" />
                                 <path class="wire" pathLength="1" d="M156 336 V360" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.24s" />
                                 <path class="wire" pathLength="1" d="M156 416 V440" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.3s" />
                                 <path class="wire" pathLength="1" d="M156 496 V520" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M156 576 V808" stroke="#efb141" style="--d:.42s" />
+                                <path class="wire" pathLength="1" d="M156 576 V828" stroke="#efb141" style="--d:.42s" />
 
                                 <!-- multivariate -->
                                 <path class="wire" pathLength="1" d="M520 256 V268" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.18s" />
@@ -801,19 +804,24 @@
                                 <path class="wire" pathLength="1" d="M644 484 V516" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.3s" />
                                 <path class="wire" pathLength="1" d="M644 612 V644" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
                                 <path class="wire" pathLength="1" d="M572 568 H404 a8 8 0 0 1 -8 -8 V492" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M332 456 H304 a8 8 0 0 0 -8 8 V808" stroke="#f0656f" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M644 708 V808" stroke="#f0656f" style="--d:.44s" />
+                                <path class="wire" pathLength="1" d="M332 456 H304 a8 8 0 0 0 -8 8 V828" stroke="#f0656f" style="--d:.44s" />
+                                <path class="wire" pathLength="1" d="M644 708 V828" stroke="#f0656f" style="--d:.44s" />
 
                                 <!-- exogenous -->
-                                <path class="wire" pathLength="1" d="M850 256 V268" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.18s" />
-                                <path class="wire" pathLength="1" d="M850 364 V420" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M946 320 H970 a8 8 0 0 1 8 8 V560 a8 8 0 0 1 -8 8 H954" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M754 456 H732 a8 8 0 0 0 -8 8 V808" stroke="#cf9ae0" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M850 596 V808" stroke="#cf9ae0" style="--d:.44s" />
+                                <path class="wire" pathLength="1" d="M980 256 V268" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.18s" />
+                                <path class="wire" pathLength="1" d="M1076 320 H1362 a8 8 0 0 1 8 8 V644 a8 8 0 0 1 -8 8 H1348" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.24s" />
+                                <path class="wire" pathLength="1" d="M980 364 V392" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.24s" />
+                                <path class="wire" pathLength="1" d="M1076 444 H1160" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M980 488 V524" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M1100 588 H1116 a8 8 0 0 1 8 8 V728" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.42s" />
+                                <path class="wire" pathLength="1" d="M860 588 H848 a8 8 0 0 0 -8 8 V728" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.42s" />
+                                <path class="wire" pathLength="1" d="M1244 696 V828" stroke="#cf9ae0" style="--d:.48s" />
+                                <path class="wire" pathLength="1" d="M840 792 V828" stroke="#cf9ae0" style="--d:.48s" />
+                                <path class="wire" pathLength="1" d="M1124 792 V828" stroke="#cf9ae0" style="--d:.48s" />
 
                                 <!-- collection bus -->
-                                <path class="wire" pathLength="1" d="M156 816 H850" stroke="#f6e2e3" style="--d:.52s" />
-                                <path class="wire" pathLength="1" d="M520 816 V840" stroke="#f6e2e3" marker-end="url(#bh)" style="--d:.58s" />
+                                <path class="wire" pathLength="1" d="M156 836 H1244" stroke="#f6e2e3" style="--d:.52s" />
+                                <path class="wire" pathLength="1" d="M520 836 V860" stroke="#f6e2e3" marker-end="url(#bh)" style="--d:.58s" />
                             </g>
 
                             <!-- ---------- nodes ---------- -->
@@ -894,57 +902,91 @@
 
                             <!-- exogenous track -->
                             <g class="fadein" style="--d:.14s">
-                                <rect x="754" y="208" width="192" height="48" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="850" y="238" font-size="16" text-anchor="middle">Input-output diagnostics</text>
+                                <rect x="884" y="208" width="192" height="48" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="980" y="238" font-size="16" text-anchor="middle">Input-output diagnostics</text>
                             </g>
                             <g class="fadein" style="--d:.2s">
-                                <path d="M850 276 L946 320 L850 364 L754 320 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
-                                <text class="n-label" x="850" y="326" font-size="16" text-anchor="middle">Regression form</text>
+                                <path d="M980 276 L1076 320 L980 364 L884 320 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
+                                <text class="n-label" x="980" y="326" font-size="16" text-anchor="middle">Regression form</text>
 
-                                <rect x="716" y="382" width="122" height="18" fill="#55131f" />
-                                <text class="a-label" x="838" y="396" font-size="12" text-anchor="end">Lagged regressors</text>
+                                <rect x="842" y="374" width="126" height="18" fill="#55131f" />
+                                <text class="a-label" x="968" y="388" font-size="12" text-anchor="end">Lagged regressors</text>
 
-                                <rect x="990" y="404" width="146" height="18" fill="#55131f" />
-                                <text class="a-label" x="990" y="418" font-size="12">Regression with ARMA</text>
-                                <rect x="990" y="422" width="146" height="18" fill="#55131f" />
-                                <text class="a-label" x="990" y="436" font-size="12">errors / ARIMAX</text>
+                                <rect x="1120" y="282" width="150" height="18" fill="#55131f" />
+                                <text class="a-label" x="1124" y="296" font-size="12">Regression with ARMA</text>
+                                <rect x="1120" y="300" width="150" height="18" fill="#55131f" />
+                                <text class="a-label" x="1124" y="314" font-size="12">errors / ARIMAX</text>
                             </g>
                             <g class="fadein" style="--d:.26s">
-                                <rect x="754" y="428" width="192" height="48" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="850" y="458" font-size="16" text-anchor="middle">ARDL / UECM / ECM</text>
+                                <path d="M980 400 L1076 444 L980 488 L884 444 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
+                                <text class="n-label" x="980" y="450" font-size="16" text-anchor="middle">Any I(2) variable?</text>
+
+                                <rect x="1086" y="426" width="36" height="18" fill="#55131f" />
+                                <text class="a-label" x="1090" y="440" font-size="12">Yes</text>
+
+                                <rect x="946" y="500" width="30" height="18" fill="#55131f" />
+                                <text class="a-label" x="961" y="514" font-size="12" text-anchor="middle">No</text>
+                            </g>
+                            <g class="fadein" style="--d:.26s">
+                                <rect x="1148" y="640" width="192" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="1244" y="664" font-size="16" text-anchor="middle">ARIMAX / dynamic</text>
+                                <text class="n-label" x="1244" y="684" font-size="16" text-anchor="middle">regression</text>
                             </g>
                             <g class="fadein" style="--d:.32s">
-                                <rect x="754" y="540" width="192" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="850" y="564" font-size="16" text-anchor="middle">ARIMAX / dynamic</text>
-                                <text class="n-label" x="850" y="584" font-size="16" text-anchor="middle">regression</text>
+                                <rect x="1168" y="420" width="176" height="48" rx="4" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.2" stroke-dasharray="5 4" />
+                                <text class="n-label" x="1256" y="450" font-size="16" text-anchor="middle">ARDL not applicable</text>
+                            </g>
+                            <g class="fadein" style="--d:.38s">
+                                <path d="M980 532 L1100 588 L980 644 L860 588 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
+                                <text class="n-label" x="980" y="582" font-size="16" text-anchor="middle">UECM +</text>
+                                <text class="n-label" x="980" y="602" font-size="16" text-anchor="middle">Bounds test</text>
+
+                                <rect x="1110" y="562" width="98" height="18" fill="#55131f" />
+                                <text class="a-label" x="1114" y="576" font-size="12">Cointegrated</text>
+
+                                <rect x="748" y="562" width="106" height="18" fill="#55131f" />
+                                <text class="a-label" x="852" y="576" font-size="12" text-anchor="end">Not cointegrated</text>
+                            </g>
+                            <g class="fadein" style="--d:.44s">
+                                <rect x="744" y="736" width="192" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="840" y="760" font-size="16" text-anchor="middle">Short-run</text>
+                                <text class="n-label" x="840" y="780" font-size="16" text-anchor="middle">differences</text>
+                            </g>
+                            <g class="fadein" style="--d:.44s">
+                                <rect x="1024" y="736" width="200" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="1124" y="760" font-size="16" text-anchor="middle">ARDL long run</text>
+                                <text class="n-label" x="1124" y="780" font-size="16" text-anchor="middle">+ ECM</text>
                             </g>
 
                             <!-- collection -->
                             <g class="fadein" style="--d:.5s">
-                                <circle cx="520" cy="816" r="4.5" fill="#f6e2e3" />
+                                <circle cx="520" cy="836" r="4.5" fill="#f6e2e3" />
                             </g>
                             <g class="fadein" style="--d:.6s">
-                                <rect x="396" y="848" width="248" height="64" rx="4" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.6" />
-                                <rect x="402" y="854" width="236" height="52" rx="2" fill="none" stroke="#efb141" stroke-width="0.8" opacity="0.55" />
-                                <text class="n-label" x="520" y="886" font-size="18" text-anchor="middle" fill="#efb141">Candidate model list</text>
+                                <rect x="396" y="868" width="248" height="64" rx="4" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.6" />
+                                <rect x="402" y="874" width="236" height="52" rx="2" fill="none" stroke="#efb141" stroke-width="0.8" opacity="0.55" />
+                                <text class="n-label" x="520" y="906" font-size="18" text-anchor="middle" fill="#efb141">Candidate model list</text>
                             </g>
 
                             <!-- legend -->
                             <g class="fadein" style="--d:.68s">
-                                <line x1="32" y1="964" x2="1128" y2="964" stroke="#c9adaf" stroke-width="0.8" opacity="0.5" />
-                                <text class="lg-label" x="32" y="992">LEGEND</text>
+                                <line x1="32" y1="984" x2="1368" y2="984" stroke="#c9adaf" stroke-width="0.8" opacity="0.5" />
+                                <text class="lg-label" x="32" y="1012">LEGEND</text>
 
-                                <rect x="112" y="983" width="20" height="10" rx="2" fill="rgba(246,226,227,.06)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="lg-label" x="142" y="992">DIAGNOSTIC STEP</text>
+                                <rect x="112" y="1003" width="20" height="10" rx="2" fill="rgba(246,226,227,.06)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="lg-label" x="142" y="1012">DIAGNOSTIC STEP</text>
 
-                                <path d="M356 983 L376 988 L356 993 L336 988 Z" fill="none" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="lg-label" x="386" y="992">DECISION</text>
+                                <path d="M356 1003 L376 1008 L356 1013 L336 1008 Z" fill="none" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="lg-label" x="386" y="1012">DECISION</text>
 
-                                <circle cx="536" cy="988" r="4.5" fill="#f6e2e3" />
-                                <text class="lg-label" x="552" y="992">COLLECTION BUS</text>
+                                <circle cx="536" cy="1008" r="4.5" fill="#f6e2e3" />
+                                <text class="lg-label" x="552" y="1012">COLLECTION BUS</text>
 
-                                <rect x="756" y="983" width="20" height="10" rx="2" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.4" />
-                                <text class="lg-label" x="786" y="992">SHARED OUTPUT</text>
+                                <rect x="756" y="1003" width="20" height="10" rx="2" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.4" />
+                                <text class="lg-label" x="786" y="1012">SHARED OUTPUT</text>
+
+                                <rect x="988" y="1003" width="20" height="10" rx="2" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.2" stroke-dasharray="5 4" />
+                                <text class="lg-label" x="1018" y="1012">DEAD END</text>
                             </g>
                         </svg>
                     </div>
