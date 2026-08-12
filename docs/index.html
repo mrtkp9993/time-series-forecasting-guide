@@ -4,8 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Time Series Forecasting Workflow</title>
-		<meta name="description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
-		<meta name="author" content="Murat Koptur" />
+        <meta name="description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
+        <meta name="author" content="Murat Koptur" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Time Series Forecasting Workflow" />
         <meta property="og:description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
@@ -15,239 +15,425 @@
         <meta name="twitter:title" content="Time Series Forecasting Workflow" />
         <meta name="twitter:description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
         <meta name="twitter:image" content="social.webp" />
+        <meta name="theme-color" content="#55131f" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=Chivo+Mono:wght@400;500&display=swap"
             rel="stylesheet"
         />
         <style>
             :root {
-                --bg: #f6f2e9;
-                --bg-accent: #efe6d6;
-                --ink: #1f1d1a;
-                --muted: #6a6257;
-                --card: #fffcf6;
-                --line: #d9cfbe;
-                --brand: #ba4a22;
-                --brand-soft: #f4d6c8;
-                --shadow: 0 12px 30px rgba(31, 29, 26, 0.08);
-                --radius: 16px;
+                /* drafting film — the reading ground */
+                --film: #e9e3e2;
+                --film-2: #f7f3f2;
+                --film-3: #f0e8e7;
+                --ink: #2a1015;
+                --ink-dim: #6d4a4e;
+                --rule: rgba(42, 16, 21, 0.16);
+                --rule-soft: rgba(42, 16, 21, 0.08);
+
+                /* oxblood — the drawing sheets */
+                --sheet: #55131f;
+                --sheet-2: #430d18;
+                --chalk: #f6e2e3;
+                --chalk-dim: #c9adaf;
+
+                /* signal — links and focus on the light ground */
+                --signal: #a3213a;
+
+                /* branch keys — one per problem structure */
+                --uni: #efb141;
+                --multi: #f0656f;
+                --exo: #cf9ae0;
+
+                --lettering: "Saira Condensed", "Arial Narrow", sans-serif;
+                --body: "Public Sans", system-ui, sans-serif;
+                --tech: "Chivo Mono", ui-monospace, monospace;
+
+                --gut: clamp(1rem, 4vw, 3rem);
             }
 
-            * {
+            *,
+            *::before,
+            *::after {
                 box-sizing: border-box;
             }
 
-            html,
-            body {
-                margin: 0;
-                padding: 0;
+            html {
+                -webkit-text-size-adjust: 100%;
             }
 
             body {
-                font-family: "Space Grotesk", sans-serif;
+                margin: 0;
+                background: var(--film);
                 color: var(--ink);
-                background:
-                    radial-gradient(
-                        circle at 10% 5%,
-                        #fff8eb 0%,
-                        transparent 35%
-                    ),
-                    radial-gradient(
-                        circle at 92% 12%,
-                        #f9e4d9 0%,
-                        transparent 30%
-                    ),
-                    linear-gradient(135deg, var(--bg) 0%, var(--bg-accent) 100%);
-                min-height: 100vh;
+                font-family: var(--body);
+                font-size: 16px;
                 line-height: 1.55;
-                padding: 2.25rem 1.2rem 3rem;
             }
 
-            .wrap {
-                max-width: 1100px;
+            .sheetstack {
+                max-width: 1280px;
                 margin: 0 auto;
-                display: grid;
-                gap: 1.2rem;
+                padding: 0 var(--gut) 0;
             }
 
-            .hero,
-            .card {
-                background: color-mix(in srgb, var(--card) 95%, white 5%);
-                border: 1px solid var(--line);
-                border-radius: var(--radius);
-                box-shadow: var(--shadow);
-            }
+            /* ---------- drawing-sheet furniture ---------- */
 
-            .hero {
-                padding: 1.5rem 1.3rem;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .hero::after {
-                content: "";
-                position: absolute;
-                inset: auto -50px -70px auto;
-                width: 220px;
-                height: 220px;
-                border-radius: 50%;
-                background: radial-gradient(
-                    circle at center,
-                    var(--brand-soft) 0%,
-                    transparent 68%
-                );
-                pointer-events: none;
-            }
-
-            h1,
-            h2 {
+            .eyebrow {
+                font-family: var(--tech);
+                font-size: 0.6875rem;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--ink-dim);
                 margin: 0;
-                letter-spacing: -0.02em;
+            }
+
+            .rule {
+                height: 1px;
+                background: var(--rule);
+                border: 0;
+                margin: 0;
+            }
+
+            /* ---------- masthead ---------- */
+
+            header.mast {
+                padding: clamp(2.5rem, 7vw, 5rem) 0 0;
+                position: relative;
             }
 
             h1 {
-                font-size: clamp(1.7rem, 4vw, 2.5rem);
-                line-height: 1.15;
+                font-family: var(--lettering);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.005em;
+                line-height: 0.94;
+                font-size: clamp(2.6rem, 9.4vw, 7.5rem);
+                margin: 1.6rem 0 0;
+                max-width: 16ch;
             }
 
-            .sub {
-                margin: 0.7rem 0 0;
-                color: var(--muted);
-                max-width: 70ch;
-                font-family: "Source Serif 4", serif;
-                font-size: 1.06rem;
+            h1 .thin {
+                font-weight: 400;
+                color: var(--ink-dim);
             }
 
-            .card {
-                padding: 1.1rem;
-                animation: rise 0.55s ease both;
+            .lede {
+                font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+                max-width: 58ch;
+                margin: 1.4rem 0 0;
+                color: #26414f;
             }
 
-            .card:nth-of-type(2) {
-                animation-delay: 0.08s;
+            /* ---------- section headers ---------- */
+
+            .sec {
+                margin-top: clamp(3rem, 7vw, 5.5rem);
             }
 
-            .card:nth-of-type(3) {
-                animation-delay: 0.16s;
+            .sec-head {
+                display: flex;
+                align-items: flex-end;
+                justify-content: space-between;
+                gap: 1rem;
+                border-bottom: 2px solid var(--ink);
+                padding-bottom: 0.45rem;
             }
 
-            .card:nth-of-type(4) {
-                animation-delay: 0.24s;
+            h2 {
+                font-family: var(--lettering);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.02em;
+                font-size: clamp(1.35rem, 3.2vw, 2.1rem);
+                line-height: 1;
+                margin: 0;
             }
 
-    h2 {
-      font-size: clamp(1.08rem, 2vw, 1.35rem);
-      margin-bottom: 0.7rem;
-      color: #2f2a24;
-    }
+            /* ---------- blueprint drawing panel ---------- */
 
-    .details {
-      margin: 0.75rem 0 0.35rem;
-      padding-left: 1.1rem;
-    }
-
-    .details li {
-      margin: 0.38rem 0;
-    }
-
-    .details strong {
-      color: #2b221b;
-    }
-
-            .mermaid {
-                background: #fffdf9;
-                border: 1px solid #e8ddcc;
-                border-radius: 12px;
-                padding: 0.5rem;
-                overflow-x: auto;
-            }
-
-            .diagram-wrap {
+            .plate {
+                margin-top: 1.1rem;
+                background: var(--sheet);
                 position: relative;
-                min-height: 180px;
+                padding: clamp(1rem, 2.6vw, 1.9rem);
             }
 
-            .diagram-wrap.is-loading .mermaid {
-                visibility: hidden;
-            }
-
-            .diagram-wrap.is-ready .mermaid {
-                visibility: visible;
-            }
-
-            .diagram-spinner {
+            /* corner ticks — a drawn sheet, not a card */
+            .plate::before,
+            .plate::after {
+                content: "";
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 42px;
-                height: 42px;
-                margin-top: -21px;
-                margin-left: -21px;
-                border: 4px solid #ead8bf;
-                border-top-color: var(--brand);
-                border-radius: 50%;
-                animation: spin 0.9s linear infinite;
+                width: 22px;
+                height: 22px;
+                border: 1px solid var(--chalk-dim);
+                opacity: 0.8;
+                pointer-events: none;
             }
 
-            .diagram-wrap.is-ready .diagram-spinner {
+            .plate::before {
+                top: 10px;
+                left: 10px;
+                border-right: 0;
+                border-bottom: 0;
+            }
+
+            .plate::after {
+                bottom: 10px;
+                right: 10px;
+                border-left: 0;
+                border-top: 0;
+            }
+
+            .pan-hint {
                 display: none;
+                font-family: var(--tech);
+                font-size: 0.625rem;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--chalk-dim);
+                margin: 0 0 0.7rem;
+            }
+
+            .canvas {
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .canvas svg {
+                display: block;
+                height: auto;
+                margin: 0 auto;
+            }
+
+            #dwg-01 {
+                width: 100%;
+                max-width: 960px;
+                min-width: 720px;
+            }
+
+            #dwg-02 {
+                width: 100%;
+                max-width: 1160px;
+                min-width: 1000px;
+            }
+
+            /* ---------- drawing typography (inside svg) ---------- */
+
+            .n-label {
+                font-family: var(--lettering);
+                font-weight: 500;
+                fill: var(--chalk);
+            }
+
+            .a-label {
+                font-family: var(--tech);
+                font-weight: 400;
+                fill: var(--chalk-dim);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+            .lg-label {
+                font-family: var(--tech);
+                font-weight: 400;
+                fill: var(--chalk-dim);
+                font-size: 11px;
+                letter-spacing: 0.16em;
+            }
+
+            /* ---------- notes block ---------- */
+
+            .notes {
+                margin-top: 1.1rem;
+                border: 1px solid var(--rule);
+                background: var(--film-2);
+                padding: clamp(1rem, 2.4vw, 1.6rem);
+            }
+
+            .notes ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                columns: 2;
+                column-gap: clamp(1.5rem, 4vw, 3rem);
+                column-rule: 1px solid var(--rule-soft);
+            }
+
+            .notes li {
+                break-inside: avoid;
+                margin: 0 0 1.05rem;
+                padding-left: 0.9rem;
+                border-left: 2px solid var(--sheet);
+                font-size: 0.95rem;
+                color: #294451;
+            }
+
+            .notes li:last-child {
+                margin-bottom: 0;
+            }
+
+            .notes strong {
+                display: block;
+                font-family: var(--lettering);
+                font-weight: 600;
+                font-size: 1.02rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--ink);
+            }
+
+            /* ---------- schedule table ---------- */
+
+            .schedule {
+                margin-top: 1.1rem;
+                border: 1px solid var(--rule);
+                background: var(--film-2);
             }
 
             table {
                 width: 100%;
                 border-collapse: collapse;
-                border-radius: 10px;
-                overflow: hidden;
-                font-size: 0.96rem;
             }
 
-            th,
-            td {
-                padding: 0.66rem 0.7rem;
-                border-bottom: 1px solid #e7dece;
+            thead th {
+                background: var(--sheet);
+                color: var(--chalk);
+                font-family: var(--tech);
+                font-weight: 400;
+                font-size: 0.625rem;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
                 text-align: left;
+                padding: 0.7rem 1rem;
+            }
+
+            tbody td {
+                padding: 0.72rem 1rem;
+                border-top: 1px solid var(--rule-soft);
                 vertical-align: top;
             }
 
-            th {
-                background: #f7eee2;
-                color: #3d3228;
+            tbody tr:hover {
+                background: var(--film-3);
+            }
+
+            tbody td:first-child {
+                font-family: var(--lettering);
                 font-weight: 600;
+                font-size: 1.06rem;
+                text-transform: uppercase;
+                letter-spacing: 0.035em;
+                width: 34%;
+                white-space: normal;
             }
 
-            tbody tr:nth-child(odd) {
-                background: #fffcf8;
+            tbody td:last-child {
+                font-family: var(--tech);
+                font-size: 0.82rem;
+                color: #294451;
+                line-height: 1.7;
             }
 
-            tbody tr:nth-child(even) {
-                background: #fff8ef;
+            /* ---------- foot title block ---------- */
+
+            footer {
+                margin-top: clamp(3rem, 7vw, 5.5rem);
+                background: var(--sheet-2);
+                color: var(--chalk);
+            }
+
+            .foot-inner {
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: clamp(1.6rem, 4vw, 2.4rem) var(--gut);
+                display: block;
+            }
+
+            .foot-inner .eyebrow {
+                color: var(--chalk-dim);
+                margin-bottom: 0.35rem;
+            }
+
+            .foot-name {
+                margin: 0;
+                font-family: var(--lettering);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                font-size: clamp(1.3rem, 3vw, 1.8rem);
+                line-height: 1;
+            }
+
+            .foot-links {
+                display: flex;
+                gap: 1.4rem;
+                flex-wrap: wrap;
+                margin-top: 0.9rem;
+                font-family: var(--tech);
+                font-size: 0.8rem;
+                letter-spacing: 0.06em;
             }
 
             a {
-                color: var(--brand);
-                text-decoration-thickness: 1.5px;
-                text-underline-offset: 2px;
+                color: inherit;
+                text-decoration: none;
+                border-bottom: 1px solid var(--signal);
+                padding-bottom: 2px;
+                transition: border-color 0.15s ease, color 0.15s ease;
             }
 
-            .contact {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 0.7rem;
-                flex-wrap: wrap;
-                font-size: 0.95rem;
+            a:hover {
+                color: var(--signal);
             }
 
-            .contact span {
-                color: var(--muted);
+            .foot-links a {
+                border-bottom-color: var(--uni);
             }
 
-            @keyframes rise {
+            .foot-links a:hover {
+                color: var(--uni);
+            }
+
+            :focus-visible {
+                outline: 2px solid var(--signal);
+                outline-offset: 3px;
+            }
+
+            /* ---------- motion: the drawing draws itself ---------- */
+
+            .js .reveal .wire {
+                stroke-dasharray: 1;
+                stroke-dashoffset: 1;
+            }
+
+            .js .reveal .fadein {
+                opacity: 0;
+            }
+
+            .js .reveal.in .wire {
+                animation: draw 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: var(--d, 0s);
+            }
+
+            .js .reveal.in .fadein {
+                animation: lift 0.5s ease forwards;
+                animation-delay: var(--d, 0s);
+            }
+
+            @keyframes draw {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+
+            @keyframes lift {
                 from {
                     opacity: 0;
-                    transform: translateY(8px);
+                    transform: translateY(6px);
                 }
                 to {
                     opacity: 1;
@@ -255,203 +441,638 @@
                 }
             }
 
-            @keyframes spin {
-                from {
-                    transform: rotate(0deg);
+            @media (prefers-reduced-motion: reduce) {
+                .js .reveal .wire {
+                    stroke-dasharray: none;
+                    stroke-dashoffset: 0;
                 }
-                to {
-                    transform: rotate(360deg);
+                .js .reveal .fadein {
+                    opacity: 1;
+                }
+                .js .reveal.in .wire,
+                .js .reveal.in .fadein {
+                    animation: none;
                 }
             }
 
-            @media (max-width: 720px) {
-                body {
-                    padding-top: 1.2rem;
-                }
+            /* ---------- narrow ---------- */
 
-                .hero,
-                .card {
-                    border-radius: 13px;
+            @media (max-width: 900px) {
+                .notes ul {
+                    columns: 1;
                 }
+            }
 
-                .card {
-                    padding: 0.85rem;
+            @media (max-width: 760px) {
+                .pan-hint {
+                    display: block;
                 }
+                .canvas {
+                    /* the sheet pans, the lettering stays legible */
+                    margin: 0 calc(-1 * clamp(1rem, 2.6vw, 1.9rem));
+                    padding: 0 clamp(1rem, 2.6vw, 1.9rem);
+                }
+                .plate {
+                    padding-left: clamp(0.75rem, 2.6vw, 1.9rem);
+                    padding-right: clamp(0.75rem, 2.6vw, 1.9rem);
+                }
+            }
 
-                th,
-                td {
-                    padding: 0.55rem;
+            @media (max-width: 620px) {
+                thead {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    overflow: hidden;
+                    clip: rect(0 0 0 0);
+                    white-space: nowrap;
+                }
+                tbody tr {
+                    display: block;
+                    border-top: 1px solid var(--rule-soft);
+                    padding: 0.85rem 1rem;
+                }
+                tbody td {
+                    display: block;
+                    border-top: 0;
+                    padding: 0;
+                }
+                tbody td:first-child {
+                    width: auto;
+                    margin-bottom: 0.2rem;
                 }
             }
         </style>
     </head>
     <body>
-        <main class="wrap">
-            <section class="hero">
-                <h1>Time Series Forecasting Workflow</h1>
-                <p class="sub">
+        <!--
+        THESIS: A forecasting workflow is a signal-flow schematic, so this is a drawing
+        sheet, not an article: the diagrams are the page and the reader finds their
+        branch, not a paragraph. Refuses the cream-paper card-stack reference page.
+        OWN-WORLD: Cyanotype drawing plates (prussian #0B3A55, chalk line work, 24px
+        construction grid, corner ticks) laid on cool drafting film; ISO-style condensed
+        lettering; mono annotation; amber/aqua/violet keyed to the three problem structures.
+        STORY: Practitioner arrives mid-project, reads the whole workflow as one drawing,
+        follows their branch's colour into diagnostics, exits at candidate model families.
+        FIRST VIEWPORT: Film ground, gridded; drawing-number eyebrow, oversized condensed
+        title bleeding to 16ch, lede, then the four-field title block; plate 01 breaks the fold.
+        FORM: Control-systems signal-flow drafting, candidate 3 of 7 grounded; seed 92dcf127.
+        FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+        -->
+        <script>
+            document.documentElement.classList.add("js");
+        </script>
+
+        <div class="sheetstack">
+            <header class="mast">
+                <h1>Time Series <span class="thin">Forecasting</span> Workflow</h1>
+                <p class="lede">
                     A practical flowchart for model design, diagnostics, and
                     selection for time series forecasting problems.
                 </p>
-            </section>
+            </header>
 
-            <section class="card">
-                <h2>Core Workflow</h2>
-                <div class="diagram-wrap is-loading">
-                <div class="diagram-spinner" aria-hidden="true"></div>
-                <div class="mermaid">
-flowchart TD					
-    A[Define problem] --> D[Initial EDA]
-    D --> E{Problem structure?}
+            <!-- ============================= SHEET 01 ============================= -->
+            <section class="sec">
+                <div class="sec-head">
+                    <h2>Core Workflow</h2>
+                </div>
 
-    E -->|One target series| F[Univariate branch]
-    E -->|Multiple target series| G[Multivariate branch]
-    E -->|One target with exogenous inputs| H[Dynamic regression branch]
+                <div class="plate">
+                    <p class="pan-hint">&#8592; drag to pan the sheet &#8594;</p>
+                    <div class="canvas">
+                        <svg
+                            id="dwg-01"
+                            class="reveal"
+                            viewBox="0 0 960 1448"
+                            role="img"
+                            aria-labelledby="dwg01-title dwg01-desc"
+                        >
+                            <title id="dwg01-title">Core time series forecasting workflow</title>
+                            <desc id="dwg01-desc">
+                                A top-down flowchart: define the problem, run initial EDA, then split by problem
+                                structure into univariate, multivariate, or dynamic regression branches. All three
+                                converge on fitting benchmarks and candidates, residual and stability diagnostics,
+                                time-series cross-validation, and forecast evaluation. Inadequate diagnostics return
+                                through model respecification, and a model that is not the best parsimonious choice
+                                returns to fitting; otherwise the forecast is finalized.
+                            </desc>
 
-    F --> K[Fit benchmarks and candidates]
-    G --> K
-    H --> K
+                            <defs>
+                                <marker id="ah" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f6e2e3" />
+                                </marker>
+                                <marker id="ah-u" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#efb141" />
+                                </marker>
+                                <marker id="ah-m" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f0656f" />
+                                </marker>
+                                <marker id="ah-x" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#cf9ae0" />
+                                </marker>
+                                <marker id="ah-d" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#c9adaf" />
+                                </marker>
+                            </defs>
 
-    K --> L[Residual and stability diagnostics]
-    L --> M{Diagnostics adequate?}
+                            <!-- ---------- wires (drawn first, behind nodes) ---------- -->
+                            <g fill="none" stroke-width="1.4" stroke-linecap="square">
+                                <path class="wire" pathLength="1" d="M480 96 L480 136" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.02s" />
+                                <path class="wire" pathLength="1" d="M480 192 L480 224" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.08s" />
 
-    M -->|No| N[Respecify model]
-    N --> K
+                                <!-- structure fan -->
+                                <path class="wire" pathLength="1" d="M348 288 H184 a8 8 0 0 0 -8 8 V408" stroke="#efb141" marker-end="url(#ah-u)" style="--d:.16s" />
+                                <path class="wire" pathLength="1" d="M480 336 V408" stroke="#f0656f" marker-end="url(#ah-m)" style="--d:.16s" />
+                                <path class="wire" pathLength="1" d="M612 288 H776 a8 8 0 0 1 8 8 V408" stroke="#cf9ae0" marker-end="url(#ah-x)" style="--d:.16s" />
 
-    M -->|Yes| O[Time-series cross-validation]
-    O --> P[Forecast evaluation]
-    P --> Q{Best parsimonious model?}
+                                <!-- merge bus -->
+                                <path class="wire" pathLength="1" d="M176 472 V504 a8 8 0 0 0 8 8 H480" stroke="#efb141" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M784 472 V504 a8 8 0 0 1 -8 8 H480" stroke="#cf9ae0" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M480 472 V520" stroke="#f0656f" style="--d:.3s" />
 
-    Q -->|No| K
-    Q -->|Yes| S[Finalize forecast]
-</div>
+                                <!-- spine -->
+                                <path class="wire" pathLength="1" d="M480 552 V560" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.42s" />
+                                <path class="wire" pathLength="1" d="M480 632 V664" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.48s" />
+                                <path class="wire" pathLength="1" d="M480 736 V768" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.54s" />
+                                <path class="wire" pathLength="1" d="M480 880 V912" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.6s" />
+                                <path class="wire" pathLength="1" d="M480 976 V1016" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.66s" />
+                                <path class="wire" pathLength="1" d="M480 1080 V1112" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.72s" />
+                                <path class="wire" pathLength="1" d="M480 1224 V1252" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.78s" />
+
+                                <!-- return path: diagnostics inadequate -->
+                                <path class="wire" pathLength="1" d="M348 832 H292" stroke="#c9adaf" stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.62s" />
+                                <path class="wire" pathLength="1" d="M176 804 V544 a8 8 0 0 1 8 -8 H456" stroke="#c9adaf" stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.68s" />
+
+                                <!-- return path: not the best parsimonious model -->
+                                <path class="wire" pathLength="1" d="M624 1176 H888 a8 8 0 0 0 8 -8 V544 a8 8 0 0 0 -8 -8 H504" stroke="#c9adaf" stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.8s" />
+                            </g>
+
+                            <!-- ---------- nodes ---------- -->
+                            <g class="fadein" style="--d:0s">
+                                <rect x="360" y="48" width="240" height="48" rx="24" fill="rgba(246,226,227,.06)" stroke="#f6e2e3" stroke-width="1.4" />
+                                <text class="n-label" x="480" y="78" font-size="16" text-anchor="middle">Define problem</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.06s">
+                                <rect x="360" y="144" width="240" height="48" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="n-label" x="480" y="174" font-size="16" text-anchor="middle">Initial EDA</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.12s">
+                                <path d="M480 232 L612 288 L480 344 L348 288 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
+                                <text class="n-label" x="480" y="294" font-size="16" text-anchor="middle">Problem structure?</text>
+                            </g>
+
+                            <!-- fan labels -->
+                            <g class="fadein" style="--d:.2s">
+                                <rect x="196" y="256" width="132" height="18" fill="#55131f" />
+                                <text class="a-label" x="262" y="270" font-size="12" text-anchor="middle">One target series</text>
+
+                                <rect x="492" y="364" width="150" height="18" fill="#55131f" />
+                                <text class="a-label" x="492" y="378" font-size="12">Multiple target series</text>
+
+                                <rect x="632" y="242" width="132" height="18" fill="#55131f" />
+                                <text class="a-label" x="698" y="256" font-size="12" text-anchor="middle">One target with</text>
+                                <rect x="632" y="260" width="132" height="18" fill="#55131f" />
+                                <text class="a-label" x="698" y="274" font-size="12" text-anchor="middle">exogenous inputs</text>
+                            </g>
+
+                            <!-- branch row -->
+                            <g class="fadein" style="--d:.26s">
+                                <rect x="68" y="416" width="216" height="56" rx="4" fill="rgba(239,177,65,.1)" stroke="#efb141" stroke-width="1.4" />
+                                <rect x="68" y="416" width="4" height="56" fill="#efb141" />
+                                <text class="n-label" x="176" y="450" font-size="16" text-anchor="middle">Univariate branch</text>
+
+                                <rect x="372" y="416" width="216" height="56" rx="4" fill="rgba(240,101,111,.1)" stroke="#f0656f" stroke-width="1.4" />
+                                <rect x="372" y="416" width="4" height="56" fill="#f0656f" />
+                                <text class="n-label" x="480" y="450" font-size="16" text-anchor="middle">Multivariate branch</text>
+
+                                <rect x="676" y="416" width="216" height="56" rx="4" fill="rgba(207,154,224,.1)" stroke="#cf9ae0" stroke-width="1.4" />
+                                <rect x="676" y="416" width="4" height="56" fill="#cf9ae0" />
+                                <text class="n-label" x="784" y="450" font-size="16" text-anchor="middle">Dynamic regression branch</text>
+                            </g>
+
+                            <!-- summing junction -->
+                            <g class="fadein" style="--d:.34s">
+                                <circle cx="480" cy="512" r="4.5" fill="#f0656f" />
+                            </g>
+                            <g class="fadein" style="--d:.38s">
+                                <circle cx="480" cy="536" r="16" fill="#55131f" stroke="#f6e2e3" stroke-width="1.4" />
+                                <path d="M469 525 L491 547 M491 525 L469 547" stroke="#f6e2e3" stroke-width="1.2" fill="none" />
+                            </g>
+
+                            <g class="fadein" style="--d:.44s">
+                                <rect x="360" y="568" width="240" height="64" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="n-label" x="480" y="596" font-size="16" text-anchor="middle">Fit benchmarks</text>
+                                <text class="n-label" x="480" y="616" font-size="16" text-anchor="middle">and candidates</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.5s">
+                                <rect x="360" y="672" width="240" height="64" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="n-label" x="480" y="700" font-size="16" text-anchor="middle">Residual and stability</text>
+                                <text class="n-label" x="480" y="720" font-size="16" text-anchor="middle">diagnostics</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.56s">
+                                <path d="M480 776 L612 832 L480 888 L348 832 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
+                                <text class="n-label" x="480" y="838" font-size="16" text-anchor="middle">Diagnostics adequate?</text>
+
+                                <rect x="296" y="798" width="30" height="18" fill="#55131f" />
+                                <text class="a-label" x="311" y="812" font-size="12" text-anchor="middle">No</text>
+
+                                <rect x="492" y="896" width="36" height="18" fill="#55131f" />
+                                <text class="a-label" x="492" y="910" font-size="12">Yes</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.62s">
+                                <rect x="68" y="804" width="216" height="56" rx="4" fill="rgba(246,226,227,.04)" stroke="#c9adaf" stroke-width="1.2" />
+                                <text class="n-label" x="176" y="838" font-size="16" text-anchor="middle">Respecify model</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.68s">
+                                <rect x="360" y="920" width="240" height="56" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="n-label" x="480" y="954" font-size="16" text-anchor="middle">Time-series cross-validation</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.72s">
+                                <rect x="360" y="1024" width="240" height="56" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="n-label" x="480" y="1058" font-size="16" text-anchor="middle">Forecast evaluation</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.76s">
+                                <path d="M480 1120 L624 1176 L480 1232 L336 1176 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
+                                <text class="n-label" x="480" y="1182" font-size="16" text-anchor="middle">Best parsimonious model?</text>
+
+                                <rect x="700" y="1142" width="30" height="18" fill="#55131f" />
+                                <text class="a-label" x="715" y="1156" font-size="12" text-anchor="middle">No</text>
+
+                                <rect x="492" y="1240" width="36" height="18" fill="#55131f" />
+                                <text class="a-label" x="492" y="1254" font-size="12">Yes</text>
+                            </g>
+
+                            <g class="fadein" style="--d:.84s">
+                                <rect x="356" y="1260" width="248" height="64" rx="32" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.6" />
+                                <rect x="362" y="1266" width="236" height="52" rx="26" fill="none" stroke="#efb141" stroke-width="0.8" opacity="0.55" />
+                                <text class="n-label" x="480" y="1298" font-size="18" text-anchor="middle" fill="#efb141">Finalize forecast</text>
+                            </g>
+
+                            <!-- ---------- legend strip ---------- -->
+                            <g class="fadein" style="--d:.9s">
+                                <line x1="32" y1="1372" x2="928" y2="1372" stroke="#c9adaf" stroke-width="0.8" opacity="0.5" />
+                                <text class="lg-label" x="32" y="1400">LEGEND</text>
+
+                                <rect x="112" y="1391" width="20" height="10" rx="2" fill="rgba(239,177,65,.2)" stroke="#efb141" stroke-width="1.2" />
+                                <text class="lg-label" x="142" y="1400">UNIVARIATE</text>
+
+                                <rect x="308" y="1391" width="20" height="10" rx="2" fill="rgba(240,101,111,.2)" stroke="#f0656f" stroke-width="1.2" />
+                                <text class="lg-label" x="338" y="1400">MULTIVARIATE</text>
+
+                                <rect x="524" y="1391" width="20" height="10" rx="2" fill="rgba(207,154,224,.2)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="lg-label" x="554" y="1400">EXOGENOUS INPUTS</text>
+
+                                <line x1="796" y1="1396" x2="826" y2="1396" stroke="#c9adaf" stroke-width="1.4" stroke-dasharray="6 4" />
+                                <text class="lg-label" x="836" y="1400">RETURN PATH</text>
+                            </g>
+                        </svg>
+                    </div>
                 </div>
             </section>
 
-    <section class="card">
-      <h2>Diagnostics &amp; Model Selection</h2>
-      <div class="diagram-wrap is-loading">
-      <div class="diagram-spinner" aria-hidden="true"></div>
-      <div class="mermaid">
-flowchart TD
-    B{Problem structure}
+            <!-- ============================= SHEET 02 ============================= -->
+            <section class="sec">
+                <div class="sec-head">
+                    <h2>Diagnostics &amp; Model Selection</h2>
+                </div>
 
-    %% Univariate
-    B --> |Univariate| U1[Trend and stationarity]
-    U1 --> U2[Seasonality checks]
-    U2 --> U3[Variance diagnostics]
-    U3 --> U4[Breaks and interventions]
-    U4 --> U5[Special dependence checks]
-    U5 --> Z[Candidate model list]
+                <div class="plate">
+                    <p class="pan-hint">&#8592; drag to pan the sheet &#8594;</p>
+                    <div class="canvas">
+                        <svg
+                            id="dwg-02"
+                            class="reveal"
+                            viewBox="0 0 1160 1048"
+                            role="img"
+                            aria-labelledby="dwg02-title dwg02-desc"
+                        >
+                            <title id="dwg02-title">Diagnostics and model selection by problem structure</title>
+                            <desc id="dwg02-desc">
+                                Three parallel diagnostic tracks fed by the problem structure. The univariate track runs
+                                trend and stationarity, seasonality, variance, breaks and interventions, and special
+                                dependence checks. The multivariate track runs system diagnostics, then tests whether the
+                                system is integrated and cointegrated to choose between VAR and VECM. The exogenous-input
+                                track runs input-output diagnostics, then picks between an ARDL-type model with lagged
+                                regressors and ARIMAX dynamic regression. All tracks end at a candidate model list.
+                            </desc>
 
-    %% Multivariate
-    B -->|Multivariate| M0[System diagnostics]
-    M0 --> M1{Integrated?}
-    M1 -->|No| M2[VAR]
-    M1 -->|Yes| M3[Cointegration tests]
-    M3 --> M4{Cointegrated?}
-    M4 -->|Yes| M5[VECM]
-    M4 -->|No| M2[VAR in differences / differenced VAR]
-    M2 --> Z
-    M5 --> Z
+                            <defs>
+                                <marker id="bh" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f6e2e3" />
+                                </marker>
+                                <marker id="bh-u" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#efb141" />
+                                </marker>
+                                <marker id="bh-m" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f0656f" />
+                                </marker>
+                                <marker id="bh-x" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 9 3.5, 0 7" fill="#cf9ae0" />
+                                </marker>
+                            </defs>
 
-    %% Dynamic regression
-    B -->|Exogenous inputs| X0[Input-output diagnostics]
-    X0 --> X3{Regression form}
-    X3 -->|Lagged regressors| X4[ARDL / UECM / ECM]
-    X3 -->|Regression with ARMA errors / ARIMAX| X5[ARIMAX / dynamic regression]
-    X4 --> Z
-    X5 --> Z
-      </div>
-      </div>
-      <ul class="details">
-        <li><strong>Trend and stationarity:</strong> ADF, PP, KPSS, break-point unit-root tests</li>
-        <li><strong>Seasonality:</strong> seasonal dummies, seasonal plots, seasonal unit-root tests</li>
-        <li><strong>Variance:</strong> log/Box-Cox, ARCH-LM, squared residual checks</li>
-        <li><strong>Breaks and interventions:</strong> Chow, Zivot-Andrews, Bai-Perron, intervention dummies</li>
-        <li><strong>Special dependence:</strong> long memory, threshold effects, regime changes, nonlinear dynamics</li>
-        <li><strong>Input-output diagnostics:</strong> lag inspection, prewhitened Cross-Correlation Function (CCF), intervention and transfer effects</li>
-      </ul>
-    </section>
+                            <!-- ---------- wires ---------- -->
+                            <g fill="none" stroke-width="1.4" stroke-linecap="square">
+                                <!-- fan from the hub -->
+                                <path class="wire" pathLength="1" d="M392 96 H164 a8 8 0 0 0 -8 8 V200" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.05s" />
+                                <path class="wire" pathLength="1" d="M520 144 V200" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.05s" />
+                                <path class="wire" pathLength="1" d="M648 96 H842 a8 8 0 0 1 8 8 V200" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.05s" />
 
-            <section class="card">
-                <h2>Model Family Selection</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Condition</th>
-                            <th>Candidate models</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Stationary linear</td>
-                            <td>AR / MA / ARMA</td>
-                        </tr>
-                        <tr>
-                            <td>Trend / nonstationary</td>
-                            <td>ARIMA</td>
-                        </tr>
-                        <tr>
-                            <td>Seasonal</td>
-                            <td>SARIMA / ETS</td>
-                        </tr>
-                        <tr>
-                            <td>Multiple seasonality</td>
-                            <td>TBATS / BATS / MSTL</td>
-                        </tr>
-                        <tr>
-                            <td>Exogenous inputs</td>
-                            <td>ARDL / ARIMAX</td>
-                        </tr>
-                        <tr>
-                            <td>Multivariate</td>
-                            <td>VAR / VECM</td>
-                        </tr>
-                        <tr>
-                            <td>Changing variance</td>
-                            <td>ARCH / GARCH / stochastic volatility / Generalized Autoregressive Score (GAS)</td>
-                        </tr>
-                        <tr>
-                            <td>Long memory</td>
-                            <td>ARFIMA / FIGARCH</td>
-                        </tr>
-                        <tr>
-                            <td>Nonlinear / regime</td>
-                            <td>TAR / SETAR / STAR / Markov switching</td>
-                        </tr>
-                        <tr>
-                            <td>Nonlinear ML</td>
-                            <td>Neural network autoregression (NNAR)</td>
-                        </tr>
-                        <tr>
-                            <td>Latent components / unobserved states</td>
-                            <td>
-                                State-space / structural time series / Kalman
-                                filter
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Mixed frequency</td>
-                            <td>MIDAS</td>
-                        </tr>
-                        <tr>
-                            <td>Intermittent demand</td>
-                            <td>Croston's method / TSB</td>
-                    </tbody>
-                </table>
+                                <!-- univariate chain -->
+                                <path class="wire" pathLength="1" d="M156 256 V280" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.18s" />
+                                <path class="wire" pathLength="1" d="M156 336 V360" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.24s" />
+                                <path class="wire" pathLength="1" d="M156 416 V440" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M156 496 V520" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.36s" />
+                                <path class="wire" pathLength="1" d="M156 576 V808" stroke="#efb141" style="--d:.42s" />
+
+                                <!-- multivariate -->
+                                <path class="wire" pathLength="1" d="M520 256 V268" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.18s" />
+                                <path class="wire" pathLength="1" d="M408 320 H404 a8 8 0 0 0 -8 8 V420" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.24s" />
+                                <path class="wire" pathLength="1" d="M632 320 H636 a8 8 0 0 1 8 8 V420" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.24s" />
+                                <path class="wire" pathLength="1" d="M644 484 V516" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M644 612 V644" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
+                                <path class="wire" pathLength="1" d="M572 568 H404 a8 8 0 0 1 -8 -8 V492" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
+                                <path class="wire" pathLength="1" d="M332 456 H304 a8 8 0 0 0 -8 8 V808" stroke="#f0656f" style="--d:.44s" />
+                                <path class="wire" pathLength="1" d="M644 708 V808" stroke="#f0656f" style="--d:.44s" />
+
+                                <!-- exogenous -->
+                                <path class="wire" pathLength="1" d="M850 256 V268" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.18s" />
+                                <path class="wire" pathLength="1" d="M850 364 V420" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.24s" />
+                                <path class="wire" pathLength="1" d="M946 320 H970 a8 8 0 0 1 8 8 V560 a8 8 0 0 1 -8 8 H954" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.3s" />
+                                <path class="wire" pathLength="1" d="M754 456 H732 a8 8 0 0 0 -8 8 V808" stroke="#cf9ae0" style="--d:.44s" />
+                                <path class="wire" pathLength="1" d="M850 596 V808" stroke="#cf9ae0" style="--d:.44s" />
+
+                                <!-- collection bus -->
+                                <path class="wire" pathLength="1" d="M156 816 H850" stroke="#f6e2e3" style="--d:.52s" />
+                                <path class="wire" pathLength="1" d="M520 816 V840" stroke="#f6e2e3" marker-end="url(#bh)" style="--d:.58s" />
+                            </g>
+
+                            <!-- ---------- nodes ---------- -->
+                            <g class="fadein" style="--d:0s">
+                                <path d="M520 48 L648 96 L520 144 L392 96 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
+                                <text class="n-label" x="520" y="102" font-size="16" text-anchor="middle">Problem structure</text>
+
+                                <rect x="212" y="62" width="90" height="18" fill="#55131f" />
+                                <text class="a-label" x="257" y="76" font-size="12" text-anchor="middle">Univariate</text>
+
+                                <rect x="532" y="164" width="96" height="18" fill="#55131f" />
+                                <text class="a-label" x="532" y="178" font-size="12">Multivariate</text>
+
+                                <rect x="686" y="62" width="128" height="18" fill="#55131f" />
+                                <text class="a-label" x="750" y="76" font-size="12" text-anchor="middle">Exogenous inputs</text>
+                            </g>
+
+                            <!-- univariate track -->
+                            <g class="fadein" style="--d:.14s">
+                                <rect x="44" y="208" width="224" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
+                                <text class="n-label" x="156" y="238" font-size="16" text-anchor="middle">Trend and stationarity</text>
+                            </g>
+                            <g class="fadein" style="--d:.2s">
+                                <rect x="44" y="288" width="224" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
+                                <text class="n-label" x="156" y="318" font-size="16" text-anchor="middle">Seasonality checks</text>
+                            </g>
+                            <g class="fadein" style="--d:.26s">
+                                <rect x="44" y="368" width="224" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
+                                <text class="n-label" x="156" y="398" font-size="16" text-anchor="middle">Variance diagnostics</text>
+                            </g>
+                            <g class="fadein" style="--d:.32s">
+                                <rect x="44" y="448" width="224" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
+                                <text class="n-label" x="156" y="478" font-size="16" text-anchor="middle">Breaks and interventions</text>
+                            </g>
+                            <g class="fadein" style="--d:.38s">
+                                <rect x="44" y="528" width="224" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
+                                <text class="n-label" x="156" y="558" font-size="16" text-anchor="middle">Special dependence checks</text>
+                            </g>
+
+                            <!-- multivariate track -->
+                            <g class="fadein" style="--d:.14s">
+                                <rect x="408" y="208" width="224" height="48" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
+                                <text class="n-label" x="520" y="238" font-size="16" text-anchor="middle">System diagnostics</text>
+                            </g>
+                            <g class="fadein" style="--d:.2s">
+                                <path d="M520 276 L632 320 L520 364 L408 320 Z" fill="rgba(240,101,111,.05)" stroke="#f0656f" stroke-width="1.4" />
+                                <text class="n-label" x="520" y="326" font-size="16" text-anchor="middle">Integrated?</text>
+
+                                <rect x="340" y="332" width="30" height="18" fill="#55131f" />
+                                <text class="a-label" x="355" y="346" font-size="12" text-anchor="middle">No</text>
+
+                                <rect x="656" y="332" width="36" height="18" fill="#55131f" />
+                                <text class="a-label" x="656" y="346" font-size="12">Yes</text>
+                            </g>
+                            <g class="fadein" style="--d:.26s">
+                                <rect x="332" y="428" width="128" height="56" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
+                                <text class="n-label" x="396" y="462" font-size="16" text-anchor="middle">VAR</text>
+                            </g>
+                            <g class="fadein" style="--d:.26s">
+                                <rect x="576" y="428" width="136" height="56" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
+                                <text class="n-label" x="644" y="452" font-size="16" text-anchor="middle">Cointegration</text>
+                                <text class="n-label" x="644" y="472" font-size="16" text-anchor="middle">tests</text>
+                            </g>
+                            <g class="fadein" style="--d:.32s">
+                                <path d="M644 524 L716 568 L644 612 L572 568 Z" fill="rgba(240,101,111,.05)" stroke="#f0656f" stroke-width="1.4" />
+                                <text class="n-label" x="644" y="574" font-size="16" text-anchor="middle">Cointegrated?</text>
+
+                                <rect x="462" y="536" width="30" height="18" fill="#55131f" />
+                                <text class="a-label" x="477" y="550" font-size="12" text-anchor="middle">No</text>
+
+                                <rect x="656" y="618" width="36" height="18" fill="#55131f" />
+                                <text class="a-label" x="656" y="632" font-size="12">Yes</text>
+                            </g>
+                            <g class="fadein" style="--d:.38s">
+                                <rect x="580" y="652" width="128" height="56" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
+                                <text class="n-label" x="644" y="686" font-size="16" text-anchor="middle">VECM</text>
+                            </g>
+
+                            <!-- exogenous track -->
+                            <g class="fadein" style="--d:.14s">
+                                <rect x="754" y="208" width="192" height="48" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="850" y="238" font-size="16" text-anchor="middle">Input-output diagnostics</text>
+                            </g>
+                            <g class="fadein" style="--d:.2s">
+                                <path d="M850 276 L946 320 L850 364 L754 320 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
+                                <text class="n-label" x="850" y="326" font-size="16" text-anchor="middle">Regression form</text>
+
+                                <rect x="716" y="382" width="122" height="18" fill="#55131f" />
+                                <text class="a-label" x="838" y="396" font-size="12" text-anchor="end">Lagged regressors</text>
+
+                                <rect x="990" y="404" width="146" height="18" fill="#55131f" />
+                                <text class="a-label" x="990" y="418" font-size="12">Regression with ARMA</text>
+                                <rect x="990" y="422" width="146" height="18" fill="#55131f" />
+                                <text class="a-label" x="990" y="436" font-size="12">errors / ARIMAX</text>
+                            </g>
+                            <g class="fadein" style="--d:.26s">
+                                <rect x="754" y="428" width="192" height="48" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="850" y="458" font-size="16" text-anchor="middle">ARDL / UECM / ECM</text>
+                            </g>
+                            <g class="fadein" style="--d:.32s">
+                                <rect x="754" y="540" width="192" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
+                                <text class="n-label" x="850" y="564" font-size="16" text-anchor="middle">ARIMAX / dynamic</text>
+                                <text class="n-label" x="850" y="584" font-size="16" text-anchor="middle">regression</text>
+                            </g>
+
+                            <!-- collection -->
+                            <g class="fadein" style="--d:.5s">
+                                <circle cx="520" cy="816" r="4.5" fill="#f6e2e3" />
+                            </g>
+                            <g class="fadein" style="--d:.6s">
+                                <rect x="396" y="848" width="248" height="64" rx="4" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.6" />
+                                <rect x="402" y="854" width="236" height="52" rx="2" fill="none" stroke="#efb141" stroke-width="0.8" opacity="0.55" />
+                                <text class="n-label" x="520" y="886" font-size="18" text-anchor="middle" fill="#efb141">Candidate model list</text>
+                            </g>
+
+                            <!-- legend -->
+                            <g class="fadein" style="--d:.68s">
+                                <line x1="32" y1="964" x2="1128" y2="964" stroke="#c9adaf" stroke-width="0.8" opacity="0.5" />
+                                <text class="lg-label" x="32" y="992">LEGEND</text>
+
+                                <rect x="112" y="983" width="20" height="10" rx="2" fill="rgba(246,226,227,.06)" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="lg-label" x="142" y="992">DIAGNOSTIC STEP</text>
+
+                                <path d="M356 983 L376 988 L356 993 L336 988 Z" fill="none" stroke="#f6e2e3" stroke-width="1.2" />
+                                <text class="lg-label" x="386" y="992">DECISION</text>
+
+                                <circle cx="536" cy="988" r="4.5" fill="#f6e2e3" />
+                                <text class="lg-label" x="552" y="992">COLLECTION BUS</text>
+
+                                <rect x="756" y="983" width="20" height="10" rx="2" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.4" />
+                                <text class="lg-label" x="786" y="992">SHARED OUTPUT</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="notes">
+                    <ul>
+                        <li>
+                            <strong>Trend and stationarity</strong>
+                            ADF, PP, KPSS, break-point unit-root tests
+                        </li>
+                        <li>
+                            <strong>Seasonality</strong>
+                            seasonal dummies, seasonal plots, seasonal unit-root
+                            tests
+                        </li>
+                        <li>
+                            <strong>Variance</strong>
+                            log/Box-Cox, ARCH-LM, squared residual checks
+                        </li>
+                        <li>
+                            <strong>Breaks and interventions</strong>
+                            Chow, Zivot-Andrews, Bai-Perron, intervention dummies
+                        </li>
+                        <li>
+                            <strong>Special dependence</strong>
+                            long memory, threshold effects, regime changes,
+                            nonlinear dynamics
+                        </li>
+                        <li>
+                            <strong>Input-output diagnostics</strong>
+                            lag inspection, prewhitened Cross-Correlation
+                            Function (CCF), intervention and transfer effects
+                        </li>
+                    </ul>
+                </div>
             </section>
 
-            <section class="card contact">
-                <span>Contact</span>
-                <div>
+            <!-- ============================= SHEET 03 ============================= -->
+            <section class="sec">
+                <div class="sec-head">
+                    <h2>Model Family Selection</h2>
+                </div>
+
+                <div class="schedule">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Condition</th>
+                                <th scope="col">Candidate models</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Stationary linear</td>
+                                <td>AR / MA / ARMA</td>
+                            </tr>
+                            <tr>
+                                <td>Trend / nonstationary</td>
+                                <td>ARIMA</td>
+                            </tr>
+                            <tr>
+                                <td>Seasonal</td>
+                                <td>SARIMA / ETS</td>
+                            </tr>
+                            <tr>
+                                <td>Multiple seasonality</td>
+                                <td>TBATS / BATS / MSTL</td>
+                            </tr>
+                            <tr>
+                                <td>Exogenous inputs</td>
+                                <td>ARDL / ARIMAX</td>
+                            </tr>
+                            <tr>
+                                <td>Multivariate</td>
+                                <td>VAR / VECM</td>
+                            </tr>
+                            <tr>
+                                <td>Changing variance</td>
+                                <td>
+                                    ARCH / GARCH / stochastic volatility /
+                                    Generalized Autoregressive Score (GAS)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Long memory</td>
+                                <td>ARFIMA / FIGARCH</td>
+                            </tr>
+                            <tr>
+                                <td>Nonlinear / regime</td>
+                                <td>TAR / SETAR / STAR / Markov switching</td>
+                            </tr>
+                            <tr>
+                                <td>Nonlinear ML</td>
+                                <td>Neural network autoregression (NNAR)</td>
+                            </tr>
+                            <tr>
+                                <td>Latent components / unobserved states</td>
+                                <td>
+                                    State-space / structural time series /
+                                    Kalman filter
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mixed frequency</td>
+                                <td>MIDAS</td>
+                            </tr>
+                            <tr>
+                                <td>Intermittent demand</td>
+                                <td>Croston's method / TSB</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <div class="foot-inner">
+                <p class="eyebrow">Contact</p>
+                <p class="foot-name">Murat Koptur</p>
+                <div class="foot-links">
                     <a
                         href="https://www.linkedin.com/in/muratkoptur/"
                         target="_blank"
                         rel="noopener noreferrer"
                         >LinkedIn</a
                     >
-                    |
                     <a
                         href="https://muratkoptur.com"
                         target="_blank"
@@ -459,39 +1080,40 @@ flowchart TD
                         >muratkoptur.com</a
                     >
                 </div>
-            </section>
-        </main>
+            </div>
+        </footer>
 
-        <script type="module">
-            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-
-            mermaid.initialize({
-                startOnLoad: false,
-                securityLevel: "loose",
-                theme: "base",
-                themeVariables: {
-                    primaryColor: "#fff6e9",
-                    primaryBorderColor: "#cf7b4f",
-                    primaryTextColor: "#221f1b",
-                    lineColor: "#99502d",
-                    secondaryColor: "#fceadd",
-                    tertiaryColor: "#fff9f3",
-                    fontFamily: "Space Grotesk",
-                },
-            });
-
-            const diagramWraps = document.querySelectorAll(".diagram-wrap");
-
-            try {
-                await mermaid.run({
-                    querySelector: ".mermaid",
+        <script>
+            (function () {
+                document.querySelectorAll(".canvas").forEach(function (c) {
+                    var over = c.scrollWidth - c.clientWidth;
+                    if (over > 0) {
+                        c.scrollLeft = over / 2;
+                    }
                 });
-            } finally {
-                diagramWraps.forEach((wrap) => {
-                    wrap.classList.remove("is-loading");
-                    wrap.classList.add("is-ready");
+
+                var plates = document.querySelectorAll(".reveal");
+                if (!("IntersectionObserver" in window)) {
+                    plates.forEach(function (p) {
+                        p.classList.add("in");
+                    });
+                    return;
+                }
+                var io = new IntersectionObserver(
+                    function (entries) {
+                        entries.forEach(function (e) {
+                            if (e.isIntersecting) {
+                                e.target.classList.add("in");
+                                io.unobserve(e.target);
+                            }
+                        });
+                    },
+                    { rootMargin: "0px 0px -12% 0px", threshold: 0.06 },
+                );
+                plates.forEach(function (p) {
+                    io.observe(p);
                 });
-            }
+            })();
         </script>
     </body>
 </html>
