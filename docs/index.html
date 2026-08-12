@@ -1,1356 +1,1468 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Time Series Forecasting Workflow</title>
-        <meta name="description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
-        <meta name="author" content="Murat Koptur" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Time Series Forecasting Workflow" />
-        <meta property="og:description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
-        <meta property="og:image" content="social.webp" />
-        <meta property="og:image:type" content="image/webp" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Time Series Forecasting Workflow" />
-        <meta name="twitter:description" content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
-        <meta name="twitter:image" content="social.webp" />
-        <meta name="theme-color" content="#55131f" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=Chivo+Mono:wght@400;500&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            :root {
-                /* drafting film — the reading ground */
-                --film: #e9e3e2;
-                --film-2: #f7f3f2;
-                --film-3: #f0e8e7;
-                --ink: #2a1015;
-                --ink-dim: #6d4a4e;
-                --rule: rgba(42, 16, 21, 0.16);
-                --rule-soft: rgba(42, 16, 21, 0.08);
 
-                /* oxblood — the drawing sheets */
-                --sheet: #55131f;
-                --sheet-2: #430d18;
-                --chalk: #f6e2e3;
-                --chalk-dim: #c9adaf;
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Series Forecasting Workflow</title>
+    <meta name="description"
+        content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
+    <meta name="author" content="Murat Koptur" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Time Series Forecasting Workflow" />
+    <meta property="og:description"
+        content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
+    <meta property="og:image" content="social.webp" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Time Series Forecasting Workflow" />
+    <meta name="twitter:description"
+        content="A practical flowchart for model design, diagnostics, and selection for time series forecasting problems." />
+    <meta name="twitter:image" content="social.webp" />
+    <meta name="theme-color" content="#55131f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=Chivo+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            /* drafting film — the reading ground */
+            --film: #e9e3e2;
+            --film-2: #f7f3f2;
+            --film-3: #f0e8e7;
+            --ink: #2a1015;
+            --ink-dim: #6d4a4e;
+            --rule: rgba(42, 16, 21, 0.16);
+            --rule-soft: rgba(42, 16, 21, 0.08);
 
-                /* signal — links and focus on the light ground */
-                --signal: #a3213a;
+            /* oxblood — the drawing sheets */
+            --sheet: #55131f;
+            --sheet-2: #430d18;
+            --chalk: #f6e2e3;
+            --chalk-dim: #c9adaf;
 
-                /* branch keys — one per problem structure */
-                --uni: #efb141;
-                --multi: #f0656f;
-                --exo: #cf9ae0;
+            /* signal — links and focus on the light ground */
+            --signal: #a3213a;
 
-                --lettering: "Saira Condensed", "Arial Narrow", sans-serif;
-                --body: "Public Sans", system-ui, sans-serif;
-                --tech: "Chivo Mono", ui-monospace, monospace;
+            /* branch keys — one per problem structure */
+            --uni: #efb141;
+            --multi: #f0656f;
+            --exo: #cf9ae0;
 
-                --gut: clamp(1rem, 4vw, 3rem);
+            --lettering: "Saira Condensed", "Arial Narrow", sans-serif;
+            --body: "Public Sans", system-ui, sans-serif;
+            --tech: "Chivo Mono", ui-monospace, monospace;
+
+            --gut: clamp(1rem, 4vw, 3rem);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--film);
+            color: var(--ink);
+            font-family: var(--body);
+            font-size: 16px;
+            line-height: 1.55;
+        }
+
+        .sheetstack {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--gut) 0;
+        }
+
+        /* ---------- drawing-sheet furniture ---------- */
+
+        .eyebrow {
+            font-family: var(--tech);
+            font-size: 0.6875rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+            margin: 0;
+        }
+
+        .rule {
+            height: 1px;
+            background: var(--rule);
+            border: 0;
+            margin: 0;
+        }
+
+        /* ---------- masthead ---------- */
+
+        header.mast {
+            padding: clamp(2.5rem, 7vw, 5rem) 0 0;
+            position: relative;
+        }
+
+        h1 {
+            font-family: var(--lettering);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.005em;
+            line-height: 0.94;
+            font-size: clamp(2.6rem, 9.4vw, 7.5rem);
+            margin: 1.6rem 0 0;
+            max-width: 16ch;
+        }
+
+        h1 .thin {
+            font-weight: 400;
+            color: var(--ink-dim);
+        }
+
+        .lede {
+            font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+            max-width: 58ch;
+            margin: 1.4rem 0 0;
+            color: #26414f;
+        }
+
+        /* ---------- section headers ---------- */
+
+        .sec {
+            margin-top: clamp(3rem, 7vw, 5.5rem);
+        }
+
+        .sec-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 0.45rem;
+        }
+
+        h2 {
+            font-family: var(--lettering);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            font-size: clamp(1.35rem, 3.2vw, 2.1rem);
+            line-height: 1;
+            margin: 0;
+        }
+
+        /* ---------- blueprint drawing panel ---------- */
+
+        .plate {
+            margin-top: 1.1rem;
+            background: var(--sheet);
+            position: relative;
+            padding: clamp(1rem, 2.6vw, 1.9rem);
+        }
+
+        /* corner ticks — a drawn sheet, not a card */
+        .plate::before,
+        .plate::after {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border: 1px solid var(--chalk-dim);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .plate::before {
+            top: 10px;
+            left: 10px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .plate::after {
+            bottom: 10px;
+            right: 10px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        .pan-hint {
+            display: none;
+            font-family: var(--tech);
+            font-size: 0.625rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--chalk-dim);
+            margin: 0 0 0.7rem;
+        }
+
+        .canvas {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .canvas svg {
+            display: block;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        #dwg-01 {
+            width: 100%;
+            max-width: 960px;
+            min-width: 720px;
+        }
+
+        #dwg-02 {
+            width: 100%;
+            max-width: 1420px;
+            min-width: 820px;
+        }
+
+        /* ---------- drawing typography (inside svg) ---------- */
+
+        .n-label {
+            font-family: var(--lettering);
+            font-weight: 500;
+            fill: var(--chalk);
+        }
+
+        .a-label {
+            font-family: var(--tech);
+            font-weight: 400;
+            fill: var(--chalk-dim);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .lg-label {
+            font-family: var(--tech);
+            font-weight: 400;
+            fill: var(--chalk-dim);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+        }
+
+        /* ---------- notes block ---------- */
+
+        .notes {
+            margin-top: 1.1rem;
+            border: 1px solid var(--rule);
+            background: var(--film-2);
+            padding: clamp(1rem, 2.4vw, 1.6rem);
+        }
+
+        .notes ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            columns: 2;
+            column-gap: clamp(1.5rem, 4vw, 3rem);
+            column-rule: 1px solid var(--rule-soft);
+        }
+
+        .notes li {
+            break-inside: avoid;
+            margin: 0 0 1.05rem;
+            padding-left: 0.9rem;
+            border-left: 2px solid var(--sheet);
+            font-size: 0.95rem;
+            color: #294451;
+        }
+
+        .notes li:last-child {
+            margin-bottom: 0;
+        }
+
+        .notes strong {
+            display: block;
+            font-family: var(--lettering);
+            font-weight: 600;
+            font-size: 1.02rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--ink);
+        }
+
+        /* ---------- schedule table ---------- */
+
+        .schedule {
+            margin-top: 1.1rem;
+            border: 1px solid var(--rule);
+            background: var(--film-2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: var(--sheet);
+            color: var(--chalk);
+            font-family: var(--tech);
+            font-weight: 400;
+            font-size: 0.625rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0.7rem 1rem;
+        }
+
+        tbody td {
+            padding: 0.72rem 1rem;
+            border-top: 1px solid var(--rule-soft);
+            vertical-align: top;
+        }
+
+        tbody tr:hover {
+            background: var(--film-3);
+        }
+
+        tbody td:first-child {
+            font-family: var(--lettering);
+            font-weight: 600;
+            font-size: 1.06rem;
+            text-transform: uppercase;
+            letter-spacing: 0.035em;
+            width: 34%;
+            white-space: normal;
+        }
+
+        tbody td:last-child {
+            font-family: var(--tech);
+            font-size: 0.82rem;
+            color: #294451;
+            line-height: 1.7;
+        }
+
+        /* ---------- foot title block ---------- */
+
+        footer {
+            margin-top: clamp(3rem, 7vw, 5.5rem);
+            background: var(--sheet-2);
+            color: var(--chalk);
+        }
+
+        .foot-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(1.6rem, 4vw, 2.4rem) var(--gut);
+            display: block;
+        }
+
+        .foot-inner .eyebrow {
+            color: var(--chalk-dim);
+            margin-bottom: 0.35rem;
+        }
+
+        .foot-name {
+            margin: 0;
+            font-family: var(--lettering);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            line-height: 1;
+        }
+
+        .foot-links {
+            display: flex;
+            gap: 1.4rem;
+            flex-wrap: wrap;
+            margin-top: 0.9rem;
+            font-family: var(--tech);
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid var(--signal);
+            padding-bottom: 2px;
+            transition: border-color 0.15s ease, color 0.15s ease;
+        }
+
+        a:hover {
+            color: var(--signal);
+        }
+
+        .foot-links a {
+            border-bottom-color: var(--uni);
+        }
+
+        .foot-links a:hover {
+            color: var(--uni);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--signal);
+            outline-offset: 3px;
+        }
+
+        /* ---------- motion: the drawing draws itself ---------- */
+
+        .js .reveal .wire {
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+        }
+
+        .js .reveal .fadein {
+            opacity: 0;
+        }
+
+        .js .reveal.in .wire {
+            animation: draw 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: var(--d, 0s);
+        }
+
+        .js .reveal.in .fadein {
+            animation: lift 0.5s ease forwards;
+            animation-delay: var(--d, 0s);
+        }
+
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes lift {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
             }
 
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
 
-            html {
-                -webkit-text-size-adjust: 100%;
-            }
-
-            body {
-                margin: 0;
-                background: var(--film);
-                color: var(--ink);
-                font-family: var(--body);
-                font-size: 16px;
-                line-height: 1.55;
-            }
-
-            .sheetstack {
-                max-width: 1280px;
-                margin: 0 auto;
-                padding: 0 var(--gut) 0;
-            }
-
-            /* ---------- drawing-sheet furniture ---------- */
-
-            .eyebrow {
-                font-family: var(--tech);
-                font-size: 0.6875rem;
-                letter-spacing: 0.22em;
-                text-transform: uppercase;
-                color: var(--ink-dim);
-                margin: 0;
-            }
-
-            .rule {
-                height: 1px;
-                background: var(--rule);
-                border: 0;
-                margin: 0;
-            }
-
-            /* ---------- masthead ---------- */
-
-            header.mast {
-                padding: clamp(2.5rem, 7vw, 5rem) 0 0;
-                position: relative;
-            }
-
-            h1 {
-                font-family: var(--lettering);
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.005em;
-                line-height: 0.94;
-                font-size: clamp(2.6rem, 9.4vw, 7.5rem);
-                margin: 1.6rem 0 0;
-                max-width: 16ch;
-            }
-
-            h1 .thin {
-                font-weight: 400;
-                color: var(--ink-dim);
-            }
-
-            .lede {
-                font-size: clamp(1.02rem, 1.6vw, 1.2rem);
-                max-width: 58ch;
-                margin: 1.4rem 0 0;
-                color: #26414f;
-            }
-
-            /* ---------- section headers ---------- */
-
-            .sec {
-                margin-top: clamp(3rem, 7vw, 5.5rem);
-            }
-
-            .sec-head {
-                display: flex;
-                align-items: flex-end;
-                justify-content: space-between;
-                gap: 1rem;
-                border-bottom: 2px solid var(--ink);
-                padding-bottom: 0.45rem;
-            }
-
-            h2 {
-                font-family: var(--lettering);
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.02em;
-                font-size: clamp(1.35rem, 3.2vw, 2.1rem);
-                line-height: 1;
-                margin: 0;
-            }
-
-            /* ---------- blueprint drawing panel ---------- */
-
-            .plate {
-                margin-top: 1.1rem;
-                background: var(--sheet);
-                position: relative;
-                padding: clamp(1rem, 2.6vw, 1.9rem);
-            }
-
-            /* corner ticks — a drawn sheet, not a card */
-            .plate::before,
-            .plate::after {
-                content: "";
-                position: absolute;
-                width: 22px;
-                height: 22px;
-                border: 1px solid var(--chalk-dim);
-                opacity: 0.8;
-                pointer-events: none;
-            }
-
-            .plate::before {
-                top: 10px;
-                left: 10px;
-                border-right: 0;
-                border-bottom: 0;
-            }
-
-            .plate::after {
-                bottom: 10px;
-                right: 10px;
-                border-left: 0;
-                border-top: 0;
-            }
-
-            .pan-hint {
-                display: none;
-                font-family: var(--tech);
-                font-size: 0.625rem;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: var(--chalk-dim);
-                margin: 0 0 0.7rem;
-            }
-
-            .canvas {
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .canvas svg {
-                display: block;
-                height: auto;
-                margin: 0 auto;
-            }
-
-            #dwg-01 {
-                width: 100%;
-                max-width: 960px;
-                min-width: 720px;
-            }
-
-            #dwg-02 {
-                width: 100%;
-                max-width: 1420px;
-                min-width: 820px;
-            }
-
-            /* ---------- drawing typography (inside svg) ---------- */
-
-            .n-label {
-                font-family: var(--lettering);
-                font-weight: 500;
-                fill: var(--chalk);
-            }
-
-            .a-label {
-                font-family: var(--tech);
-                font-weight: 400;
-                fill: var(--chalk-dim);
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-            }
-
-            .lg-label {
-                font-family: var(--tech);
-                font-weight: 400;
-                fill: var(--chalk-dim);
-                font-size: 11px;
-                letter-spacing: 0.16em;
-            }
-
-            /* ---------- notes block ---------- */
-
-            .notes {
-                margin-top: 1.1rem;
-                border: 1px solid var(--rule);
-                background: var(--film-2);
-                padding: clamp(1rem, 2.4vw, 1.6rem);
-            }
-
-            .notes ul {
-                margin: 0;
-                padding: 0;
-                list-style: none;
-                columns: 2;
-                column-gap: clamp(1.5rem, 4vw, 3rem);
-                column-rule: 1px solid var(--rule-soft);
-            }
-
-            .notes li {
-                break-inside: avoid;
-                margin: 0 0 1.05rem;
-                padding-left: 0.9rem;
-                border-left: 2px solid var(--sheet);
-                font-size: 0.95rem;
-                color: #294451;
-            }
-
-            .notes li:last-child {
-                margin-bottom: 0;
-            }
-
-            .notes strong {
-                display: block;
-                font-family: var(--lettering);
-                font-weight: 600;
-                font-size: 1.02rem;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                color: var(--ink);
-            }
-
-            /* ---------- schedule table ---------- */
-
-            .schedule {
-                margin-top: 1.1rem;
-                border: 1px solid var(--rule);
-                background: var(--film-2);
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            thead th {
-                background: var(--sheet);
-                color: var(--chalk);
-                font-family: var(--tech);
-                font-weight: 400;
-                font-size: 0.625rem;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                text-align: left;
-                padding: 0.7rem 1rem;
-            }
-
-            tbody td {
-                padding: 0.72rem 1rem;
-                border-top: 1px solid var(--rule-soft);
-                vertical-align: top;
-            }
-
-            tbody tr:hover {
-                background: var(--film-3);
-            }
-
-            tbody td:first-child {
-                font-family: var(--lettering);
-                font-weight: 600;
-                font-size: 1.06rem;
-                text-transform: uppercase;
-                letter-spacing: 0.035em;
-                width: 34%;
-                white-space: normal;
-            }
-
-            tbody td:last-child {
-                font-family: var(--tech);
-                font-size: 0.82rem;
-                color: #294451;
-                line-height: 1.7;
-            }
-
-            /* ---------- foot title block ---------- */
-
-            footer {
-                margin-top: clamp(3rem, 7vw, 5.5rem);
-                background: var(--sheet-2);
-                color: var(--chalk);
-            }
-
-            .foot-inner {
-                max-width: 1280px;
-                margin: 0 auto;
-                padding: clamp(1.6rem, 4vw, 2.4rem) var(--gut);
-                display: block;
-            }
-
-            .foot-inner .eyebrow {
-                color: var(--chalk-dim);
-                margin-bottom: 0.35rem;
-            }
-
-            .foot-name {
-                margin: 0;
-                font-family: var(--lettering);
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.04em;
-                font-size: clamp(1.3rem, 3vw, 1.8rem);
-                line-height: 1;
-            }
-
-            .foot-links {
-                display: flex;
-                gap: 1.4rem;
-                flex-wrap: wrap;
-                margin-top: 0.9rem;
-                font-family: var(--tech);
-                font-size: 0.8rem;
-                letter-spacing: 0.06em;
-            }
-
-            a {
-                color: inherit;
-                text-decoration: none;
-                border-bottom: 1px solid var(--signal);
-                padding-bottom: 2px;
-                transition: border-color 0.15s ease, color 0.15s ease;
-            }
-
-            a:hover {
-                color: var(--signal);
-            }
-
-            .foot-links a {
-                border-bottom-color: var(--uni);
-            }
-
-            .foot-links a:hover {
-                color: var(--uni);
-            }
-
-            :focus-visible {
-                outline: 2px solid var(--signal);
-                outline-offset: 3px;
-            }
-
-            /* ---------- motion: the drawing draws itself ---------- */
-
+        @media (prefers-reduced-motion: reduce) {
             .js .reveal .wire {
-                stroke-dasharray: 1;
-                stroke-dashoffset: 1;
+                stroke-dasharray: none;
+                stroke-dashoffset: 0;
             }
 
             .js .reveal .fadein {
-                opacity: 0;
+                opacity: 1;
             }
 
-            .js .reveal.in .wire {
-                animation: draw 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-                animation-delay: var(--d, 0s);
-            }
-
+            .js .reveal.in .wire,
             .js .reveal.in .fadein {
-                animation: lift 0.5s ease forwards;
-                animation-delay: var(--d, 0s);
+                animation: none;
+            }
+        }
+
+        /* ---------- print control ---------- */
+
+        .mast-tools {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .tool {
+            font-family: var(--tech);
+            font-size: 0.6875rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+            background: transparent;
+            border: 1px solid var(--rule);
+            border-radius: 0;
+            padding: 0.5rem 0.9rem;
+            cursor: pointer;
+            transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .tool:hover {
+            color: var(--signal);
+            border-color: var(--signal);
+            background: var(--film-2);
+        }
+
+        /* ---------- narrow ---------- */
+
+        @media (max-width: 900px) {
+            .notes ul {
+                columns: 1;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .pan-hint {
+                display: block;
             }
 
-            @keyframes draw {
-                to {
-                    stroke-dashoffset: 0;
-                }
+            .canvas {
+                /* the sheet pans, the lettering stays legible */
+                margin: 0 calc(-1 * clamp(1rem, 2.6vw, 1.9rem));
+                padding: 0 clamp(1rem, 2.6vw, 1.9rem);
             }
 
-            @keyframes lift {
-                from {
-                    opacity: 0;
-                    transform: translateY(6px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+            .plate {
+                padding-left: clamp(0.75rem, 2.6vw, 1.9rem);
+                padding-right: clamp(0.75rem, 2.6vw, 1.9rem);
+            }
+        }
+
+        @media (max-width: 620px) {
+            thead {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+                clip: rect(0 0 0 0);
+                white-space: nowrap;
             }
 
-            @media (prefers-reduced-motion: reduce) {
-                .js .reveal .wire {
-                    stroke-dasharray: none;
-                    stroke-dashoffset: 0;
-                }
-                .js .reveal .fadein {
-                    opacity: 1;
-                }
-                .js .reveal.in .wire,
-                .js .reveal.in .fadein {
-                    animation: none;
-                }
+            tbody tr {
+                display: block;
+                border-top: 1px solid var(--rule-soft);
+                padding: 0.85rem 1rem;
             }
 
-            /* ---------- print control ---------- */
-
-            .mast-tools {
-                display: flex;
-                justify-content: flex-end;
+            tbody td {
+                display: block;
+                border-top: 0;
+                padding: 0;
             }
 
-            .tool {
-                font-family: var(--tech);
-                font-size: 0.6875rem;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: var(--ink-dim);
-                background: transparent;
-                border: 1px solid var(--rule);
-                border-radius: 0;
-                padding: 0.5rem 0.9rem;
-                cursor: pointer;
-                transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+            tbody td:first-child {
+                width: auto;
+                margin-bottom: 0.2rem;
+            }
+        }
+
+        /* ---------- print: one sheet per page ---------- */
+
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
+        /* the wide diagnostics sheet earns a landscape page */
+        @page land {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+
+        @media print {
+
+            html,
+            body {
+                background: #fff;
             }
 
-            .tool:hover {
-                color: var(--signal);
-                border-color: var(--signal);
-                background: var(--film-2);
+            .noprint,
+            .pan-hint,
+            footer .foot-links {
+                display: none !important;
             }
 
-            /* ---------- narrow ---------- */
-
-            @media (max-width: 900px) {
-                .notes ul {
-                    columns: 1;
-                }
+            /* the drawings must be finished, not mid-animation */
+            .js .reveal .wire {
+                stroke-dasharray: none;
+                stroke-dashoffset: 0;
             }
 
-            @media (max-width: 760px) {
-                .pan-hint {
-                    display: block;
-                }
-                .canvas {
-                    /* the sheet pans, the lettering stays legible */
-                    margin: 0 calc(-1 * clamp(1rem, 2.6vw, 1.9rem));
-                    padding: 0 clamp(1rem, 2.6vw, 1.9rem);
-                }
-                .plate {
-                    padding-left: clamp(0.75rem, 2.6vw, 1.9rem);
-                    padding-right: clamp(0.75rem, 2.6vw, 1.9rem);
-                }
+            .js .reveal .fadein {
+                opacity: 1;
+                transform: none;
             }
 
-            @media (max-width: 620px) {
-                thead {
-                    position: absolute;
-                    width: 1px;
-                    height: 1px;
-                    overflow: hidden;
-                    clip: rect(0 0 0 0);
-                    white-space: nowrap;
-                }
-                tbody tr {
-                    display: block;
-                    border-top: 1px solid var(--rule-soft);
-                    padding: 0.85rem 1rem;
-                }
-                tbody td {
-                    display: block;
-                    border-top: 0;
-                    padding: 0;
-                }
-                tbody td:first-child {
-                    width: auto;
-                    margin-bottom: 0.2rem;
-                }
-            }
-            /* ---------- print: one sheet per page ---------- */
-
-            @page {
-                size: A4;
-                margin: 12mm;
+            .js .reveal.in .wire,
+            .js .reveal.in .fadein {
+                animation: none;
             }
 
-            /* the wide diagnostics sheet earns a landscape page */
-            @page land {
-                size: A4 landscape;
-                margin: 10mm;
+            .sheetstack {
+                max-width: none;
+                padding: 0;
             }
 
-            @media print {
-                html,
-                body {
-                    background: #fff;
-                }
-
-                .noprint,
-                .pan-hint,
-                footer .foot-links {
-                    display: none !important;
-                }
-
-                /* the drawings must be finished, not mid-animation */
-                .js .reveal .wire {
-                    stroke-dasharray: none;
-                    stroke-dashoffset: 0;
-                }
-                .js .reveal .fadein {
-                    opacity: 1;
-                    transform: none;
-                }
-                .js .reveal.in .wire,
-                .js .reveal.in .fadein {
-                    animation: none;
-                }
-
-                .sheetstack {
-                    max-width: none;
-                    padding: 0;
-                }
-
-                header.mast {
-                    padding: 0 0 6mm;
-                }
-
-                h1 {
-                    font-size: 3.2rem;
-                    margin-top: 0;
-                }
-
-                .lede {
-                    font-size: 1rem;
-                }
-
-                /* each drawing sheet gets its own page */
-                .sec {
-                    break-before: page;
-                    margin-top: 0;
-                }
-
-                .sec-head {
-                    margin-bottom: 4mm;
-                }
-
-                .plate,
-                .notes,
-                .schedule,
-                footer {
-                    break-inside: avoid;
-                }
-
-                /* keep the oxblood sheets — they are the drawing, not decoration */
-                .plate,
-                thead th,
-                footer {
-                    -webkit-print-color-adjust: exact;
-                    print-color-adjust: exact;
-                }
-
-                .plate {
-                    padding: 8mm;
-                }
-
-                .canvas {
-                    overflow: visible !important;
-                }
-
-                .canvas svg {
-                    width: auto !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
-                    max-height: 232mm;
-                    height: auto;
-                }
-
-                .sec-land {
-                    page: land;
-                }
-
-                .sec-land .canvas svg {
-                    max-height: 158mm;
-                }
-
-                .notes ul {
-                    columns: 2;
-                }
-
-                a {
-                    border-bottom: 0;
-                }
-
-                footer {
-                    margin-top: 8mm;
-                }
+            header.mast {
+                padding: 0 0 6mm;
             }
 
-        </style>
-    </head>
-    <body>
-        <!--
-        THESIS: A forecasting workflow is a signal-flow schematic, so this is a drawing
-        sheet, not an article: the diagrams are the page and the reader finds their
-        branch, not a paragraph. Refuses the cream-paper card-stack reference page.
-        OWN-WORLD: Cyanotype drawing plates (prussian #0B3A55, chalk line work, 24px
-        construction grid, corner ticks) laid on cool drafting film; ISO-style condensed
-        lettering; mono annotation; amber/aqua/violet keyed to the three problem structures.
-        STORY: Practitioner arrives mid-project, reads the whole workflow as one drawing,
-        follows their branch's colour into diagnostics, exits at candidate model families.
-        FIRST VIEWPORT: Film ground, gridded; drawing-number eyebrow, oversized condensed
-        title bleeding to 16ch, lede, then the four-field title block; plate 01 breaks the fold.
-        FORM: Control-systems signal-flow drafting, candidate 3 of 7 grounded; seed 92dcf127.
-        FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
-        -->
-        <script>
-            document.documentElement.classList.add("js");
-        </script>
-
-        <div class="sheetstack">
-            <header class="mast">
-                <div class="mast-tools noprint">
-                    <button type="button" id="printbtn" class="tool">Print / PDF</button>
-                </div>
-                <h1>Time Series <span class="thin">Forecasting</span> Workflow</h1>
-                <p class="lede">
-                    A practical flowchart for model design, diagnostics, and
-                    selection for time series forecasting problems.
-                </p>
-            </header>
-
-            <!-- ============================= SHEET 01 ============================= -->
-            <section class="sec">
-                <div class="sec-head">
-                    <h2>Core Workflow</h2>
-                </div>
-
-                <div class="plate">
-                    <p class="pan-hint">&#8592; drag to pan the sheet &#8594;</p>
-                    <div class="canvas">
-                        <svg
-                            id="dwg-01"
-                            class="reveal"
-                            viewBox="0 0 960 1448"
-                            role="img"
-                            aria-labelledby="dwg01-title dwg01-desc"
-                        >
-                            <title id="dwg01-title">Core time series forecasting workflow</title>
-                            <desc id="dwg01-desc">
-                                A top-down flowchart: define the problem, run initial EDA, then split by problem
-                                structure into univariate, multivariate, or dynamic regression branches. All three
-                                converge on fitting benchmarks and candidates, residual and stability diagnostics,
-                                time-series cross-validation, and forecast evaluation. Inadequate diagnostics return
-                                through model respecification, and a model that is not the best parsimonious choice
-                                returns to fitting; otherwise the forecast is finalized.
-                            </desc>
-
-                            <defs>
-                                <marker id="ah" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f6e2e3" />
-                                </marker>
-                                <marker id="ah-u" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#efb141" />
-                                </marker>
-                                <marker id="ah-m" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f0656f" />
-                                </marker>
-                                <marker id="ah-x" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#cf9ae0" />
-                                </marker>
-                                <marker id="ah-d" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#c9adaf" />
-                                </marker>
-                            </defs>
-
-                            <!-- ---------- wires (drawn first, behind nodes) ---------- -->
-                            <g fill="none" stroke-width="1.4" stroke-linecap="square">
-                                <path class="wire" pathLength="1" d="M480 96 L480 136" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.02s" />
-                                <path class="wire" pathLength="1" d="M480 192 L480 224" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.08s" />
-
-                                <!-- structure fan -->
-                                <path class="wire" pathLength="1" d="M348 288 H184 a8 8 0 0 0 -8 8 V408" stroke="#efb141" marker-end="url(#ah-u)" style="--d:.16s" />
-                                <path class="wire" pathLength="1" d="M480 336 V408" stroke="#f0656f" marker-end="url(#ah-m)" style="--d:.16s" />
-                                <path class="wire" pathLength="1" d="M612 288 H776 a8 8 0 0 1 8 8 V408" stroke="#cf9ae0" marker-end="url(#ah-x)" style="--d:.16s" />
-
-                                <!-- merge bus -->
-                                <path class="wire" pathLength="1" d="M176 472 V504 a8 8 0 0 0 8 8 H480" stroke="#efb141" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M784 472 V504 a8 8 0 0 1 -8 8 H480" stroke="#cf9ae0" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M480 472 V520" stroke="#f0656f" style="--d:.3s" />
-
-                                <!-- spine -->
-                                <path class="wire" pathLength="1" d="M480 552 V560" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.42s" />
-                                <path class="wire" pathLength="1" d="M480 632 V664" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.48s" />
-                                <path class="wire" pathLength="1" d="M480 736 V768" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.54s" />
-                                <path class="wire" pathLength="1" d="M480 880 V912" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.6s" />
-                                <path class="wire" pathLength="1" d="M480 976 V1016" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.66s" />
-                                <path class="wire" pathLength="1" d="M480 1080 V1112" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.72s" />
-                                <path class="wire" pathLength="1" d="M480 1224 V1252" stroke="#f6e2e3" marker-end="url(#ah)" style="--d:.78s" />
-
-                                <!-- return path: diagnostics inadequate -->
-                                <path class="wire" pathLength="1" d="M348 832 H292" stroke="#c9adaf" stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.62s" />
-                                <path class="wire" pathLength="1" d="M176 804 V544 a8 8 0 0 1 8 -8 H456" stroke="#c9adaf" stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.68s" />
-
-                                <!-- return path: not the best parsimonious model -->
-                                <path class="wire" pathLength="1" d="M624 1176 H888 a8 8 0 0 0 8 -8 V544 a8 8 0 0 0 -8 -8 H504" stroke="#c9adaf" stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.8s" />
-                            </g>
-
-                            <!-- ---------- nodes ---------- -->
-                            <g class="fadein" style="--d:0s">
-                                <rect x="360" y="48" width="240" height="48" rx="24" fill="rgba(246,226,227,.06)" stroke="#f6e2e3" stroke-width="1.4" />
-                                <text class="n-label" x="480" y="78" font-size="16" text-anchor="middle">Define problem</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.06s">
-                                <rect x="360" y="144" width="240" height="48" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="n-label" x="480" y="174" font-size="16" text-anchor="middle">Initial EDA</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.12s">
-                                <path d="M480 232 L612 288 L480 344 L348 288 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
-                                <text class="n-label" x="480" y="294" font-size="16" text-anchor="middle">Problem structure?</text>
-                            </g>
-
-                            <!-- fan labels -->
-                            <g class="fadein" style="--d:.2s">
-                                <rect x="196" y="256" width="132" height="18" fill="#55131f" />
-                                <text class="a-label" x="262" y="270" font-size="12" text-anchor="middle">One target series</text>
-
-                                <rect x="492" y="364" width="150" height="18" fill="#55131f" />
-                                <text class="a-label" x="492" y="378" font-size="12">Multiple target series</text>
-
-                                <rect x="632" y="242" width="132" height="18" fill="#55131f" />
-                                <text class="a-label" x="698" y="256" font-size="12" text-anchor="middle">One target with</text>
-                                <rect x="632" y="260" width="132" height="18" fill="#55131f" />
-                                <text class="a-label" x="698" y="274" font-size="12" text-anchor="middle">exogenous inputs</text>
-                            </g>
-
-                            <!-- branch row -->
-                            <g class="fadein" style="--d:.26s">
-                                <rect x="68" y="416" width="216" height="56" rx="4" fill="rgba(239,177,65,.1)" stroke="#efb141" stroke-width="1.4" />
-                                <rect x="68" y="416" width="4" height="56" fill="#efb141" />
-                                <text class="n-label" x="176" y="450" font-size="16" text-anchor="middle">Univariate branch</text>
-
-                                <rect x="372" y="416" width="216" height="56" rx="4" fill="rgba(240,101,111,.1)" stroke="#f0656f" stroke-width="1.4" />
-                                <rect x="372" y="416" width="4" height="56" fill="#f0656f" />
-                                <text class="n-label" x="480" y="450" font-size="16" text-anchor="middle">Multivariate branch</text>
-
-                                <rect x="676" y="416" width="216" height="56" rx="4" fill="rgba(207,154,224,.1)" stroke="#cf9ae0" stroke-width="1.4" />
-                                <rect x="676" y="416" width="4" height="56" fill="#cf9ae0" />
-                                <text class="n-label" x="784" y="450" font-size="16" text-anchor="middle">Dynamic regression branch</text>
-                            </g>
-
-                            <!-- summing junction -->
-                            <g class="fadein" style="--d:.34s">
-                                <circle cx="480" cy="512" r="4.5" fill="#f0656f" />
-                            </g>
-                            <g class="fadein" style="--d:.38s">
-                                <circle cx="480" cy="536" r="16" fill="#55131f" stroke="#f6e2e3" stroke-width="1.4" />
-                                <path d="M469 525 L491 547 M491 525 L469 547" stroke="#f6e2e3" stroke-width="1.2" fill="none" />
-                            </g>
-
-                            <g class="fadein" style="--d:.44s">
-                                <rect x="360" y="568" width="240" height="64" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="n-label" x="480" y="596" font-size="16" text-anchor="middle">Fit benchmarks</text>
-                                <text class="n-label" x="480" y="616" font-size="16" text-anchor="middle">and candidates</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.5s">
-                                <rect x="360" y="672" width="240" height="64" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="n-label" x="480" y="700" font-size="16" text-anchor="middle">Residual and stability</text>
-                                <text class="n-label" x="480" y="720" font-size="16" text-anchor="middle">diagnostics</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.56s">
-                                <path d="M480 776 L612 832 L480 888 L348 832 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
-                                <text class="n-label" x="480" y="838" font-size="16" text-anchor="middle">Diagnostics adequate?</text>
-
-                                <rect x="296" y="798" width="30" height="18" fill="#55131f" />
-                                <text class="a-label" x="311" y="812" font-size="12" text-anchor="middle">No</text>
-
-                                <rect x="492" y="896" width="36" height="18" fill="#55131f" />
-                                <text class="a-label" x="492" y="910" font-size="12">Yes</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.62s">
-                                <rect x="68" y="804" width="216" height="56" rx="4" fill="rgba(246,226,227,.04)" stroke="#c9adaf" stroke-width="1.2" />
-                                <text class="n-label" x="176" y="838" font-size="16" text-anchor="middle">Respecify model</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.68s">
-                                <rect x="360" y="920" width="240" height="56" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="n-label" x="480" y="954" font-size="16" text-anchor="middle">Time-series cross-validation</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.72s">
-                                <rect x="360" y="1024" width="240" height="56" rx="4" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="n-label" x="480" y="1058" font-size="16" text-anchor="middle">Forecast evaluation</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.76s">
-                                <path d="M480 1120 L624 1176 L480 1232 L336 1176 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
-                                <text class="n-label" x="480" y="1182" font-size="16" text-anchor="middle">Best parsimonious model?</text>
-
-                                <rect x="700" y="1142" width="30" height="18" fill="#55131f" />
-                                <text class="a-label" x="715" y="1156" font-size="12" text-anchor="middle">No</text>
-
-                                <rect x="492" y="1240" width="36" height="18" fill="#55131f" />
-                                <text class="a-label" x="492" y="1254" font-size="12">Yes</text>
-                            </g>
-
-                            <g class="fadein" style="--d:.84s">
-                                <rect x="356" y="1260" width="248" height="64" rx="32" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.6" />
-                                <rect x="362" y="1266" width="236" height="52" rx="26" fill="none" stroke="#efb141" stroke-width="0.8" opacity="0.55" />
-                                <text class="n-label" x="480" y="1298" font-size="18" text-anchor="middle" fill="#efb141">Finalize forecast</text>
-                            </g>
-
-                            <!-- ---------- legend strip ---------- -->
-                            <g class="fadein" style="--d:.9s">
-                                <line x1="32" y1="1372" x2="928" y2="1372" stroke="#c9adaf" stroke-width="0.8" opacity="0.5" />
-                                <text class="lg-label" x="32" y="1400">LEGEND</text>
-
-                                <rect x="112" y="1391" width="20" height="10" rx="2" fill="rgba(239,177,65,.2)" stroke="#efb141" stroke-width="1.2" />
-                                <text class="lg-label" x="142" y="1400">UNIVARIATE</text>
-
-                                <rect x="308" y="1391" width="20" height="10" rx="2" fill="rgba(240,101,111,.2)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="lg-label" x="338" y="1400">MULTIVARIATE</text>
-
-                                <rect x="524" y="1391" width="20" height="10" rx="2" fill="rgba(207,154,224,.2)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="lg-label" x="554" y="1400">EXOGENOUS INPUTS</text>
-
-                                <line x1="796" y1="1396" x2="826" y2="1396" stroke="#c9adaf" stroke-width="1.4" stroke-dasharray="6 4" />
-                                <text class="lg-label" x="836" y="1400">RETURN PATH</text>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============================= SHEET 02 ============================= -->
-            <section class="sec sec-land">
-                <div class="sec-head">
-                    <h2>Diagnostics &amp; Model Selection</h2>
-                </div>
-
-                <div class="plate">
-                    <p class="pan-hint">&#8592; drag to pan the sheet &#8594;</p>
-                    <div class="canvas">
-                        <svg
-                            id="dwg-02"
-                            class="reveal"
-                            viewBox="0 0 1420 1000"
-                            role="img"
-                            aria-labelledby="dwg02-title dwg02-desc"
-                        >
-                            <title id="dwg02-title">Diagnostics and model selection by problem structure</title>
-                            <desc id="dwg02-desc">
-                                Three parallel diagnostic tracks fed by the problem structure. The univariate track runs
-                                trend and stationarity, seasonality, variance, breaks and interventions, and special
-                                dependence checks. The multivariate track runs system diagnostics, then reads the integration
-                                order: all I(0) goes to a level VAR, any I(2) to I(2) methods or respecification, and
-                                I(1) to a Johansen rank test whose rank decides between a differenced VAR, a VECM, and a
-                                level VAR. The exogenous-input
-                                track runs input-output diagnostics, then picks between ARIMAX dynamic regression and a
-                                lagged-regressor path that rules out ARDL when any variable is I(2), otherwise runs lag
-                                selection and a UECM bounds test, giving an ARDL long-run model with ECM when
-                                cointegrated and short-run differences when not. All tracks end at a candidate model
-                                list.
-                            </desc>
-
-                            <defs>
-                                <marker id="bh" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f6e2e3" />
-                                </marker>
-                                <marker id="bh-u" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#efb141" />
-                                </marker>
-                                <marker id="bh-m" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#f0656f" />
-                                </marker>
-                                <marker id="bh-x" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 9 3.5, 0 7" fill="#cf9ae0" />
-                                </marker>
-                            </defs>
-
-                            <!-- ---------- wires ---------- -->
-                            <g fill="none" stroke-width="1.4" stroke-linecap="square">
-                                <!-- fan from the hub -->
-                                <path class="wire" pathLength="1" d="M334 88 H124 a8 8 0 0 0 -8 8 V200" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.05s" />
-                                <path class="wire" pathLength="1" d="M450 136 V200" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.05s" />
-                                <path class="wire" pathLength="1" d="M566 88 H902 a8 8 0 0 1 8 8 V200" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.05s" />
-
-                                <!-- univariate chain -->
-                                <path class="wire" pathLength="1" d="M116 256 V316" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.18s" />
-                                <path class="wire" pathLength="1" d="M116 372 V432" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M116 488 V548" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M116 604 V664" stroke="#efb141" marker-end="url(#bh-u)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M116 720 V772" stroke="#efb141" style="--d:.44s" />
-
-                                <!-- multivariate -->
-                                <path class="wire" pathLength="1" d="M450 256 V296" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.18s" />
-                                <path class="wire" pathLength="1" d="M350 348 H318 a8 8 0 0 0 -8 8 V428" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M450 392 V432" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M550 348 H592 a8 8 0 0 1 8 8 V428" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M600 492 V528" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M516 580 H478 a8 8 0 0 1 -8 -8 V496" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M600 624 V664" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M684 580 H737 a8 8 0 0 1 8 8 V664" stroke="#f0656f" marker-end="url(#bh-m)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M310 492 V772" stroke="#f0656f" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M420 488 V772" stroke="#f0656f" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M600 720 V772" stroke="#f0656f" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M745 720 V772" stroke="#f0656f" style="--d:.44s" />
-
-                                <!-- exogenous -->
-                                <path class="wire" pathLength="1" d="M910 256 V296" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.18s" />
-                                <path class="wire" pathLength="1" d="M910 392 V412" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M1010 348 H1326 a8 8 0 0 1 8 8 V428" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.24s" />
-                                <path class="wire" pathLength="1" d="M1010 464 H1082" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M910 508 V528" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.3s" />
-                                <path class="wire" pathLength="1" d="M910 624 V660" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M1014 580 H1087 a8 8 0 0 1 8 8 V660" stroke="#cf9ae0" marker-end="url(#bh-x)" style="--d:.36s" />
-                                <path class="wire" pathLength="1" d="M1334 492 V772" stroke="#cf9ae0" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M910 724 V772" stroke="#cf9ae0" style="--d:.44s" />
-                                <path class="wire" pathLength="1" d="M1095 724 V772" stroke="#cf9ae0" style="--d:.44s" />
-
-                                <!-- collection bus -->
-                                <path class="wire" pathLength="1" d="M116 772 H1334" stroke="#f6e2e3" style="--d:.52s" />
-                                <path class="wire" pathLength="1" d="M450 772 V796" stroke="#f6e2e3" marker-end="url(#bh)" style="--d:.58s" />
-                            </g>
-
-                            <!-- ---------- nodes ---------- -->
-                            <g class="fadein" style="--d:0s">
-                                <path d="M450 40 L566 88 L450 136 L334 88 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3" stroke-width="1.4" />
-                                <text class="n-label" x="450" y="94" font-size="16" text-anchor="middle">Problem structure</text>
-
-                                <rect x="190" y="66" width="90" height="18" fill="#55131f" />
-                                <text class="a-label" x="195" y="80" font-size="12">Univariate</text>
-
-                                <rect x="458" y="158" width="107" height="18" fill="#55131f" />
-                                <text class="a-label" x="463" y="172" font-size="12">Multivariate</text>
-
-                                <rect x="660" y="66" width="139" height="18" fill="#55131f" />
-                                <text class="a-label" x="665" y="80" font-size="12">Exogenous inputs</text>
-                            </g>
-
-                            <!-- univariate track -->
-                            <g class="fadein" style="--d:.14s">
-                                <rect x="16" y="208" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
-                                <text class="n-label" x="116" y="238" font-size="16" text-anchor="middle">Trend and stationarity</text>
-                            </g>
-                            <g class="fadein" style="--d:.2s">
-                                <rect x="16" y="324" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
-                                <text class="n-label" x="116" y="354" font-size="16" text-anchor="middle">Seasonality checks</text>
-                            </g>
-                            <g class="fadein" style="--d:.26s">
-                                <rect x="16" y="440" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
-                                <text class="n-label" x="116" y="470" font-size="16" text-anchor="middle">Variance diagnostics</text>
-                            </g>
-                            <g class="fadein" style="--d:.32s">
-                                <rect x="16" y="556" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
-                                <text class="n-label" x="116" y="586" font-size="16" text-anchor="middle">Breaks and interventions</text>
-                            </g>
-                            <g class="fadein" style="--d:.38s">
-                                <rect x="16" y="672" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)" stroke="#efb141" stroke-width="1.2" />
-                                <text class="n-label" x="116" y="702" font-size="16" text-anchor="middle">Special dependence checks</text>
-                            </g>
-
-                            <!-- multivariate track -->
-                            <g class="fadein" style="--d:.14s">
-                                <rect x="350" y="208" width="200" height="48" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="n-label" x="450" y="238" font-size="16" text-anchor="middle">System diagnostics</text>
-                            </g>
-                            <g class="fadein" style="--d:.2s">
-                                <path d="M450 304 L550 348 L450 392 L350 348 Z" fill="rgba(240,101,111,.05)" stroke="#f0656f" stroke-width="1.4" />
-                                <text class="n-label" x="450" y="354" font-size="16" text-anchor="middle">Integration order?</text>
-
-                                <rect x="268" y="326" width="74" height="18" fill="#55131f" />
-                                <text class="a-label" x="273" y="340" font-size="12">Any I(2)</text>
-
-                                <rect x="458" y="402" width="74" height="18" fill="#55131f" />
-                                <text class="a-label" x="463" y="416" font-size="12">All I(0)</text>
-
-                                <rect x="556" y="326" width="41" height="18" fill="#55131f" />
-                                <text class="a-label" x="561" y="340" font-size="12">I(1)</text>
-                            </g>
-                            <g class="fadein" style="--d:.26s">
-                                <rect x="245" y="436" width="130" height="56" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="n-label" x="310" y="460" font-size="16" text-anchor="middle">I(2) methods /</text>
-                                <text class="n-label" x="310" y="480" font-size="16" text-anchor="middle">respecify</text>
-                            </g>
-                            <g class="fadein" style="--d:.26s">
-                                <rect x="397" y="440" width="106" height="48" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="n-label" x="450" y="470" font-size="16" text-anchor="middle">Level VAR</text>
-                            </g>
-                            <g class="fadein" style="--d:.26s">
-                                <rect x="535" y="436" width="130" height="56" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="n-label" x="600" y="460" font-size="16" text-anchor="middle">Johansen rank</text>
-                                <text class="n-label" x="600" y="480" font-size="16" text-anchor="middle">test</text>
-                            </g>
-                            <g class="fadein" style="--d:.32s">
-                                <path d="M600 536 L684 580 L600 624 L516 580 Z" fill="rgba(240,101,111,.05)" stroke="#f0656f" stroke-width="1.4" />
-                                <text class="n-label" x="600" y="586" font-size="16" text-anchor="middle">Rank r?</text>
-
-                                <rect x="424" y="548" width="49" height="18" fill="#55131f" />
-                                <text class="a-label" x="429" y="562" font-size="12">r = K</text>
-
-                                <rect x="608" y="632" width="49" height="18" fill="#55131f" />
-                                <text class="a-label" x="613" y="646" font-size="12">r = 0</text>
-
-                                <rect x="690" y="552" width="82" height="18" fill="#55131f" />
-                                <text class="a-label" x="695" y="566" font-size="12">0 &lt; r &lt; K</text>
-                            </g>
-                            <g class="fadein" style="--d:.38s">
-                                <rect x="530" y="672" width="140" height="48" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="n-label" x="600" y="702" font-size="16" text-anchor="middle">Differenced VAR</text>
-                            </g>
-                            <g class="fadein" style="--d:.38s">
-                                <rect x="692" y="672" width="106" height="48" rx="4" fill="rgba(240,101,111,.07)" stroke="#f0656f" stroke-width="1.2" />
-                                <text class="n-label" x="745" y="702" font-size="16" text-anchor="middle">VECM</text>
-                            </g>
-
-                            <!-- exogenous track -->
-                            <g class="fadein" style="--d:.14s">
-                                <rect x="810" y="208" width="200" height="48" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="910" y="238" font-size="16" text-anchor="middle">Input-output diagnostics</text>
-                            </g>
-                            <g class="fadein" style="--d:.2s">
-                                <path d="M910 304 L1010 348 L910 392 L810 348 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
-                                <text class="n-label" x="910" y="354" font-size="16" text-anchor="middle">Regression form</text>
-
-                                <rect x="748" y="394" width="148" height="18" fill="#55131f" />
-                                <text class="a-label" x="891" y="408" font-size="12" text-anchor="end">Lagged regressors</text>
-
-                                <rect x="1032" y="300" width="172" height="18" fill="#55131f" />
-                                <text class="a-label" x="1037" y="314" font-size="12">Regression with ARMA</text>
-                                <rect x="1032" y="318" width="131" height="18" fill="#55131f" />
-                                <text class="a-label" x="1037" y="332" font-size="12">errors / ARIMAX</text>
-                            </g>
-                            <g class="fadein" style="--d:.26s">
-                                <path d="M910 420 L1010 464 L910 508 L810 464 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
-                                <text class="n-label" x="910" y="470" font-size="16" text-anchor="middle">Any I(2) variable?</text>
-
-                                <rect x="1034" y="440" width="33" height="18" fill="#55131f" />
-                                <text class="a-label" x="1039" y="454" font-size="12">Yes</text>
-
-                                <rect x="918" y="510" width="25" height="18" fill="#55131f" />
-                                <text class="a-label" x="923" y="524" font-size="12">No</text>
-                            </g>
-                            <g class="fadein" style="--d:.26s">
-                                <rect x="1264" y="436" width="140" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="1334" y="460" font-size="16" text-anchor="middle">ARIMAX / dynamic</text>
-                                <text class="n-label" x="1334" y="480" font-size="16" text-anchor="middle">regression</text>
-                            </g>
-                            <g class="fadein" style="--d:.32s">
-                                <rect x="1090" y="440" width="156" height="48" rx="4" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.2" stroke-dasharray="5 4" />
-                                <text class="n-label" x="1168" y="470" font-size="16" text-anchor="middle">ARDL not applicable</text>
-                            </g>
-                            <g class="fadein" style="--d:.32s">
-                                <path d="M910 536 L1014 580 L910 624 L806 580 Z" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.4" />
-                                <text class="n-label" x="910" y="574" font-size="16" text-anchor="middle">UECM +</text>
-                                <text class="n-label" x="910" y="594" font-size="16" text-anchor="middle">Bounds test</text>
-
-                                <rect x="760" y="630" width="139" height="18" fill="#55131f" />
-                                <text class="a-label" x="894" y="644" font-size="12" text-anchor="end">Not cointegrated</text>
-
-                                <rect x="1094" y="632" width="107" height="18" fill="#55131f" />
-                                <text class="a-label" x="1099" y="646" font-size="12">Cointegrated</text>
-                            </g>
-                            <g class="fadein" style="--d:.38s">
-                                <rect x="840" y="668" width="140" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="910" y="692" font-size="16" text-anchor="middle">Short-run</text>
-                                <text class="n-label" x="910" y="712" font-size="16" text-anchor="middle">differences</text>
-                            </g>
-                            <g class="fadein" style="--d:.38s">
-                                <rect x="1010" y="668" width="170" height="56" rx="4" fill="rgba(207,154,224,.07)" stroke="#cf9ae0" stroke-width="1.2" />
-                                <text class="n-label" x="1095" y="692" font-size="16" text-anchor="middle">ARDL long run</text>
-                                <text class="n-label" x="1095" y="712" font-size="16" text-anchor="middle">+ ECM</text>
-                            </g>
-
-                            <!-- collection -->
-                            <g class="fadein" style="--d:.5s">
-                                <circle cx="450" cy="772" r="4.5" fill="#f6e2e3" />
-                            </g>
-                            <g class="fadein" style="--d:.6s">
-                                <rect x="326" y="804" width="248" height="64" rx="4" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.6" />
-                                <rect x="332" y="810" width="236" height="52" rx="2" fill="none" stroke="#efb141" stroke-width="0.8" opacity="0.55" />
-                                <text class="n-label" x="450" y="842" font-size="18" text-anchor="middle" fill="#efb141">Candidate model list</text>
-                            </g>
-
-                            <!-- legend -->
-                            <g class="fadein" style="--d:.68s">
-                                <line x1="16" y1="916" x2="1404" y2="916" stroke="#c9adaf" stroke-width="0.8" opacity="0.5" />
-                                <text class="lg-label" x="16" y="944">LEGEND</text>
-
-                                <rect x="96" y="935" width="20" height="10" rx="2" fill="rgba(246,226,227,.06)" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="lg-label" x="126" y="944">DIAGNOSTIC STEP</text>
-
-                                <path d="M340 935 L360 940 L340 945 L320 940 Z" fill="none" stroke="#f6e2e3" stroke-width="1.2" />
-                                <text class="lg-label" x="370" y="944">DECISION</text>
-
-                                <circle cx="520" cy="940" r="4.5" fill="#f6e2e3" />
-                                <text class="lg-label" x="536" y="944">COLLECTION BUS</text>
-
-                                <rect x="740" y="935" width="20" height="10" rx="2" fill="rgba(239,177,65,.12)" stroke="#efb141" stroke-width="1.4" />
-                                <text class="lg-label" x="770" y="944">SHARED OUTPUT</text>
-
-                                <rect x="972" y="935" width="20" height="10" rx="2" fill="rgba(207,154,224,.05)" stroke="#cf9ae0" stroke-width="1.2" stroke-dasharray="5 4" />
-                                <text class="lg-label" x="1002" y="944">DEAD END</text>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="notes">
-                    <ul>
-                        <li>
-                            <strong>Trend and stationarity</strong>
-                            ADF, PP, KPSS, break-point unit-root tests
-                        </li>
-                        <li>
-                            <strong>Seasonality</strong>
-                            seasonal dummies, seasonal plots, seasonal unit-root
-                            tests
-                        </li>
-                        <li>
-                            <strong>Variance</strong>
-                            log/Box-Cox, ARCH-LM, squared residual checks
-                        </li>
-                        <li>
-                            <strong>Breaks and interventions</strong>
-                            Chow, Zivot-Andrews, Bai-Perron, intervention dummies
-                        </li>
-                        <li>
-                            <strong>Special dependence</strong>
-                            long memory, threshold effects, regime changes,
-                            nonlinear dynamics
-                        </li>
-                        <li>
-                            <strong>Input-output diagnostics</strong>
-                            lag inspection, prewhitened Cross-Correlation
-                            Function (CCF), intervention and transfer effects
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- ============================= SHEET 03 ============================= -->
-            <section class="sec">
-                <div class="sec-head">
-                    <h2>Model Family Selection</h2>
-                </div>
-
-                <div class="schedule">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th scope="col">Condition</th>
-                                <th scope="col">Candidate models</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Stationary linear</td>
-                                <td>AR / MA / ARMA</td>
-                            </tr>
-                            <tr>
-                                <td>Trend / nonstationary</td>
-                                <td>ARIMA</td>
-                            </tr>
-                            <tr>
-                                <td>Seasonal</td>
-                                <td>SARIMA / ETS</td>
-                            </tr>
-                            <tr>
-                                <td>Multiple seasonality</td>
-                                <td>TBATS / BATS / MSTL</td>
-                            </tr>
-                            <tr>
-                                <td>Exogenous inputs</td>
-                                <td>ARDL / ARIMAX</td>
-                            </tr>
-                            <tr>
-                                <td>Multivariate</td>
-                                <td>VAR / VECM</td>
-                            </tr>
-                            <tr>
-                                <td>Changing variance</td>
-                                <td>
-                                    ARCH / GARCH / stochastic volatility /
-                                    Generalized Autoregressive Score (GAS)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Long memory</td>
-                                <td>ARFIMA / FIGARCH</td>
-                            </tr>
-                            <tr>
-                                <td>Nonlinear / regime</td>
-                                <td>TAR / SETAR / STAR / Markov switching</td>
-                            </tr>
-                            <tr>
-                                <td>Nonlinear ML</td>
-                                <td>Neural network autoregression (NNAR)</td>
-                            </tr>
-                            <tr>
-                                <td>Latent components / unobserved states</td>
-                                <td>
-                                    State-space / structural time series /
-                                    Kalman filter
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Mixed frequency</td>
-                                <td>MIDAS</td>
-                            </tr>
-                            <tr>
-                                <td>Intermittent demand</td>
-                                <td>Croston's method / TSB</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </div>
-
-        <footer>
-            <div class="foot-inner">
-                <p class="eyebrow">Contact</p>
-                <p class="foot-name">Murat Koptur</p>
-                <div class="foot-links">
-                    <a
-                        href="https://www.linkedin.com/in/muratkoptur/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >LinkedIn</a
-                    >
-                    <a
-                        href="https://muratkoptur.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >muratkoptur.com</a
-                    >
+            h1 {
+                font-size: 3.2rem;
+                margin-top: 0;
+            }
+
+            .lede {
+                font-size: 1rem;
+            }
+
+            /* each drawing sheet gets its own page */
+            .sec {
+                break-before: page;
+                margin-top: 0;
+            }
+
+            .sec-head {
+                margin-bottom: 4mm;
+            }
+
+            .plate,
+            .notes,
+            .schedule,
+            footer {
+                break-inside: avoid;
+            }
+
+            /* keep the oxblood sheets — they are the drawing, not decoration */
+            .plate,
+            thead th,
+            footer {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .plate {
+                padding: 8mm;
+            }
+
+            .canvas {
+                overflow: visible !important;
+            }
+
+            .canvas svg {
+                width: auto !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                max-height: 232mm;
+                height: auto;
+            }
+
+            .sec-land {
+                page: land;
+            }
+
+            .sec-land .canvas svg {
+                max-height: 158mm;
+            }
+
+            .notes ul {
+                columns: 2;
+            }
+
+            a {
+                border-bottom: 0;
+            }
+
+            footer {
+                margin-top: 8mm;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        document.documentElement.classList.add("js");
+    </script>
+
+    <div class="sheetstack">
+        <header class="mast">
+            <div class="mast-tools noprint">
+                <button type="button" id="printbtn" class="tool">Print / PDF</button>
+            </div>
+            <h1>Time Series <span class="thin">Forecasting</span> Workflow</h1>
+            <p class="lede">
+                A practical flowchart for model design, diagnostics, and
+                selection for time series forecasting problems.
+            </p>
+        </header>
+
+        <!-- ============================= SHEET 01 ============================= -->
+        <section class="sec">
+            <div class="sec-head">
+                <h2>Core Workflow</h2>
+            </div>
+
+            <div class="plate">
+                <p class="pan-hint">&#8592; drag to pan the sheet &#8594;</p>
+                <div class="canvas">
+                    <svg id="dwg-01" class="reveal" viewBox="0 0 960 1448" role="img"
+                        aria-labelledby="dwg01-title dwg01-desc">
+                        <title id="dwg01-title">Core time series forecasting workflow</title>
+                        <desc id="dwg01-desc">
+                            A top-down flowchart: define the problem, run initial EDA, then split by problem
+                            structure into univariate, multivariate, or dynamic regression branches. All three
+                            converge on fitting benchmarks and candidates, residual and stability diagnostics,
+                            time-series cross-validation, and forecast evaluation. Inadequate diagnostics return
+                            through model respecification, and a model that is not the best parsimonious choice
+                            returns to fitting; otherwise the forecast is finalized.
+                        </desc>
+
+                        <defs>
+                            <marker id="ah" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#f6e2e3" />
+                            </marker>
+                            <marker id="ah-u" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#efb141" />
+                            </marker>
+                            <marker id="ah-m" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#f0656f" />
+                            </marker>
+                            <marker id="ah-x" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#cf9ae0" />
+                            </marker>
+                            <marker id="ah-d" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#c9adaf" />
+                            </marker>
+                        </defs>
+
+                        <!-- ---------- wires (drawn first, behind nodes) ---------- -->
+                        <g fill="none" stroke-width="1.4" stroke-linecap="square">
+                            <path class="wire" pathLength="1" d="M480 96 L480 136" stroke="#f6e2e3"
+                                marker-end="url(#ah)" style="--d:.02s" />
+                            <path class="wire" pathLength="1" d="M480 192 L480 224" stroke="#f6e2e3"
+                                marker-end="url(#ah)" style="--d:.08s" />
+
+                            <!-- structure fan -->
+                            <path class="wire" pathLength="1" d="M348 288 H184 a8 8 0 0 0 -8 8 V408" stroke="#efb141"
+                                marker-end="url(#ah-u)" style="--d:.16s" />
+                            <path class="wire" pathLength="1" d="M480 336 V408" stroke="#f0656f" marker-end="url(#ah-m)"
+                                style="--d:.16s" />
+                            <path class="wire" pathLength="1" d="M612 288 H776 a8 8 0 0 1 8 8 V408" stroke="#cf9ae0"
+                                marker-end="url(#ah-x)" style="--d:.16s" />
+
+                            <!-- merge bus -->
+                            <path class="wire" pathLength="1" d="M176 472 V504 a8 8 0 0 0 8 8 H480" stroke="#efb141"
+                                style="--d:.3s" />
+                            <path class="wire" pathLength="1" d="M784 472 V504 a8 8 0 0 1 -8 8 H480" stroke="#cf9ae0"
+                                style="--d:.3s" />
+                            <path class="wire" pathLength="1" d="M480 472 V520" stroke="#f0656f" style="--d:.3s" />
+
+                            <!-- spine -->
+                            <path class="wire" pathLength="1" d="M480 552 V560" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.42s" />
+                            <path class="wire" pathLength="1" d="M480 632 V664" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.48s" />
+                            <path class="wire" pathLength="1" d="M480 736 V768" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.54s" />
+                            <path class="wire" pathLength="1" d="M480 880 V912" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.6s" />
+                            <path class="wire" pathLength="1" d="M480 976 V1016" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.66s" />
+                            <path class="wire" pathLength="1" d="M480 1080 V1112" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.72s" />
+                            <path class="wire" pathLength="1" d="M480 1224 V1252" stroke="#f6e2e3" marker-end="url(#ah)"
+                                style="--d:.78s" />
+
+                            <!-- return path: diagnostics inadequate -->
+                            <path class="wire" pathLength="1" d="M348 832 H292" stroke="#c9adaf" stroke-dasharray="6 4"
+                                marker-end="url(#ah-d)" style="--d:.62s" />
+                            <path class="wire" pathLength="1" d="M176 804 V544 a8 8 0 0 1 8 -8 H456" stroke="#c9adaf"
+                                stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.68s" />
+
+                            <!-- return path: not the best parsimonious model -->
+                            <path class="wire" pathLength="1"
+                                d="M624 1176 H888 a8 8 0 0 0 8 -8 V544 a8 8 0 0 0 -8 -8 H504" stroke="#c9adaf"
+                                stroke-dasharray="6 4" marker-end="url(#ah-d)" style="--d:.8s" />
+                        </g>
+
+                        <!-- ---------- nodes ---------- -->
+                        <g class="fadein" style="--d:0s">
+                            <rect x="360" y="48" width="240" height="48" rx="24" fill="rgba(246,226,227,.06)"
+                                stroke="#f6e2e3" stroke-width="1.4" />
+                            <text class="n-label" x="480" y="78" font-size="16" text-anchor="middle">Define
+                                problem</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.06s">
+                            <rect x="360" y="144" width="240" height="48" rx="4" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.2" />
+                            <text class="n-label" x="480" y="174" font-size="16" text-anchor="middle">Initial EDA</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.12s">
+                            <path d="M480 232 L612 288 L480 344 L348 288 Z" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.4" />
+                            <text class="n-label" x="480" y="294" font-size="16" text-anchor="middle">Problem
+                                structure?</text>
+                        </g>
+
+                        <!-- fan labels -->
+                        <g class="fadein" style="--d:.2s">
+                            <rect x="196" y="256" width="132" height="18" fill="#55131f" />
+                            <text class="a-label" x="262" y="270" font-size="12" text-anchor="middle">One target
+                                series</text>
+
+                            <rect x="492" y="364" width="150" height="18" fill="#55131f" />
+                            <text class="a-label" x="492" y="378" font-size="12">Multiple target series</text>
+
+                            <rect x="632" y="242" width="132" height="18" fill="#55131f" />
+                            <text class="a-label" x="698" y="256" font-size="12" text-anchor="middle">One target
+                                with</text>
+                            <rect x="632" y="260" width="132" height="18" fill="#55131f" />
+                            <text class="a-label" x="698" y="274" font-size="12" text-anchor="middle">exogenous
+                                inputs</text>
+                        </g>
+
+                        <!-- branch row -->
+                        <g class="fadein" style="--d:.26s">
+                            <rect x="68" y="416" width="216" height="56" rx="4" fill="rgba(239,177,65,.1)"
+                                stroke="#efb141" stroke-width="1.4" />
+                            <rect x="68" y="416" width="4" height="56" fill="#efb141" />
+                            <text class="n-label" x="176" y="450" font-size="16" text-anchor="middle">Univariate
+                                branch</text>
+
+                            <rect x="372" y="416" width="216" height="56" rx="4" fill="rgba(240,101,111,.1)"
+                                stroke="#f0656f" stroke-width="1.4" />
+                            <rect x="372" y="416" width="4" height="56" fill="#f0656f" />
+                            <text class="n-label" x="480" y="450" font-size="16" text-anchor="middle">Multivariate
+                                branch</text>
+
+                            <rect x="676" y="416" width="216" height="56" rx="4" fill="rgba(207,154,224,.1)"
+                                stroke="#cf9ae0" stroke-width="1.4" />
+                            <rect x="676" y="416" width="4" height="56" fill="#cf9ae0" />
+                            <text class="n-label" x="784" y="450" font-size="16" text-anchor="middle">Dynamic regression
+                                branch</text>
+                        </g>
+
+                        <!-- summing junction -->
+                        <g class="fadein" style="--d:.34s">
+                            <circle cx="480" cy="512" r="4.5" fill="#f0656f" />
+                        </g>
+                        <g class="fadein" style="--d:.38s">
+                            <circle cx="480" cy="536" r="16" fill="#55131f" stroke="#f6e2e3" stroke-width="1.4" />
+                            <path d="M469 525 L491 547 M491 525 L469 547" stroke="#f6e2e3" stroke-width="1.2"
+                                fill="none" />
+                        </g>
+
+                        <g class="fadein" style="--d:.44s">
+                            <rect x="360" y="568" width="240" height="64" rx="4" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.2" />
+                            <text class="n-label" x="480" y="596" font-size="16" text-anchor="middle">Fit
+                                benchmarks</text>
+                            <text class="n-label" x="480" y="616" font-size="16" text-anchor="middle">and
+                                candidates</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.5s">
+                            <rect x="360" y="672" width="240" height="64" rx="4" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.2" />
+                            <text class="n-label" x="480" y="700" font-size="16" text-anchor="middle">Residual and
+                                stability</text>
+                            <text class="n-label" x="480" y="720" font-size="16" text-anchor="middle">diagnostics</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.56s">
+                            <path d="M480 776 L612 832 L480 888 L348 832 Z" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.4" />
+                            <text class="n-label" x="480" y="838" font-size="16" text-anchor="middle">Diagnostics
+                                adequate?</text>
+
+                            <rect x="296" y="798" width="30" height="18" fill="#55131f" />
+                            <text class="a-label" x="311" y="812" font-size="12" text-anchor="middle">No</text>
+
+                            <rect x="492" y="896" width="36" height="18" fill="#55131f" />
+                            <text class="a-label" x="492" y="910" font-size="12">Yes</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.62s">
+                            <rect x="68" y="804" width="216" height="56" rx="4" fill="rgba(246,226,227,.04)"
+                                stroke="#c9adaf" stroke-width="1.2" />
+                            <text class="n-label" x="176" y="838" font-size="16" text-anchor="middle">Respecify
+                                model</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.68s">
+                            <rect x="360" y="920" width="240" height="56" rx="4" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.2" />
+                            <text class="n-label" x="480" y="954" font-size="16" text-anchor="middle">Time-series
+                                cross-validation</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.72s">
+                            <rect x="360" y="1024" width="240" height="56" rx="4" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.2" />
+                            <text class="n-label" x="480" y="1058" font-size="16" text-anchor="middle">Forecast
+                                evaluation</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.76s">
+                            <path d="M480 1120 L624 1176 L480 1232 L336 1176 Z" fill="rgba(246,226,227,.04)"
+                                stroke="#f6e2e3" stroke-width="1.4" />
+                            <text class="n-label" x="480" y="1182" font-size="16" text-anchor="middle">Best parsimonious
+                                model?</text>
+
+                            <rect x="700" y="1142" width="30" height="18" fill="#55131f" />
+                            <text class="a-label" x="715" y="1156" font-size="12" text-anchor="middle">No</text>
+
+                            <rect x="492" y="1240" width="36" height="18" fill="#55131f" />
+                            <text class="a-label" x="492" y="1254" font-size="12">Yes</text>
+                        </g>
+
+                        <g class="fadein" style="--d:.84s">
+                            <rect x="356" y="1260" width="248" height="64" rx="32" fill="rgba(239,177,65,.12)"
+                                stroke="#efb141" stroke-width="1.6" />
+                            <rect x="362" y="1266" width="236" height="52" rx="26" fill="none" stroke="#efb141"
+                                stroke-width="0.8" opacity="0.55" />
+                            <text class="n-label" x="480" y="1298" font-size="18" text-anchor="middle"
+                                fill="#efb141">Finalize forecast</text>
+                        </g>
+
+                        <!-- ---------- legend strip ---------- -->
+                        <g class="fadein" style="--d:.9s">
+                            <line x1="32" y1="1372" x2="928" y2="1372" stroke="#c9adaf" stroke-width="0.8"
+                                opacity="0.5" />
+                            <text class="lg-label" x="32" y="1400">LEGEND</text>
+
+                            <rect x="112" y="1391" width="20" height="10" rx="2" fill="rgba(239,177,65,.2)"
+                                stroke="#efb141" stroke-width="1.2" />
+                            <text class="lg-label" x="142" y="1400">UNIVARIATE</text>
+
+                            <rect x="308" y="1391" width="20" height="10" rx="2" fill="rgba(240,101,111,.2)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="lg-label" x="338" y="1400">MULTIVARIATE</text>
+
+                            <rect x="524" y="1391" width="20" height="10" rx="2" fill="rgba(207,154,224,.2)"
+                                stroke="#cf9ae0" stroke-width="1.2" />
+                            <text class="lg-label" x="554" y="1400">EXOGENOUS INPUTS</text>
+
+                            <line x1="796" y1="1396" x2="826" y2="1396" stroke="#c9adaf" stroke-width="1.4"
+                                stroke-dasharray="6 4" />
+                            <text class="lg-label" x="836" y="1400">RETURN PATH</text>
+                        </g>
+                    </svg>
                 </div>
             </div>
-        </footer>
+        </section>
 
-        <script>
-            (function () {
-                document.querySelectorAll(".canvas").forEach(function (c) {
-                    var over = c.scrollWidth - c.clientWidth;
-                    if (over > 0) {
-                        c.scrollLeft = over / 2;
-                    }
-                });
+        <!-- ============================= SHEET 02 ============================= -->
+        <section class="sec sec-land">
+            <div class="sec-head">
+                <h2>Diagnostics &amp; Model Selection</h2>
+            </div>
 
-                var plates = document.querySelectorAll(".reveal");
+            <div class="plate">
+                <p class="pan-hint">&#8592; drag to pan the sheet &#8594;</p>
+                <div class="canvas">
+                    <svg id="dwg-02" class="reveal" viewBox="0 0 1420 1000" role="img"
+                        aria-labelledby="dwg02-title dwg02-desc">
+                        <title id="dwg02-title">Diagnostics and model selection by problem structure</title>
+                        <desc id="dwg02-desc">
+                            Three parallel diagnostic tracks fed by the problem structure. The univariate track runs
+                            trend and stationarity, seasonality, variance, breaks and interventions, and special
+                            dependence checks. The multivariate track runs system diagnostics, then reads the
+                            integration
+                            order: all I(0) goes to a level VAR, any I(2) to I(2) methods or respecification, and
+                            I(1) to a Johansen rank test whose rank decides between a differenced VAR, a VECM, and a
+                            level VAR. The exogenous-input
+                            track runs input-output diagnostics, then picks between ARIMAX dynamic regression and a
+                            lagged-regressor path that rules out ARDL when any variable is I(2), otherwise runs lag
+                            selection and a UECM bounds test, giving an ARDL long-run model with ECM when
+                            cointegrated and short-run differences when not. All tracks end at a candidate model
+                            list.
+                        </desc>
 
-                // printing must never catch a drawing mid-draw
-                function settle() {
-                    plates.forEach(function (p) {
-                        p.classList.add("in");
-                    });
+                        <defs>
+                            <marker id="bh" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#f6e2e3" />
+                            </marker>
+                            <marker id="bh-u" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#efb141" />
+                            </marker>
+                            <marker id="bh-m" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#f0656f" />
+                            </marker>
+                            <marker id="bh-x" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                                <polygon points="0 0, 9 3.5, 0 7" fill="#cf9ae0" />
+                            </marker>
+                        </defs>
+
+                        <!-- ---------- wires ---------- -->
+                        <g fill="none" stroke-width="1.4" stroke-linecap="square">
+                            <!-- fan from the hub -->
+                            <path class="wire" pathLength="1" d="M334 88 H124 a8 8 0 0 0 -8 8 V200" stroke="#efb141"
+                                marker-end="url(#bh-u)" style="--d:.05s" />
+                            <path class="wire" pathLength="1" d="M450 136 V200" stroke="#f0656f" marker-end="url(#bh-m)"
+                                style="--d:.05s" />
+                            <path class="wire" pathLength="1" d="M566 88 H902 a8 8 0 0 1 8 8 V200" stroke="#cf9ae0"
+                                marker-end="url(#bh-x)" style="--d:.05s" />
+
+                            <!-- univariate chain -->
+                            <path class="wire" pathLength="1" d="M116 256 V316" stroke="#efb141" marker-end="url(#bh-u)"
+                                style="--d:.18s" />
+                            <path class="wire" pathLength="1" d="M116 372 V432" stroke="#efb141" marker-end="url(#bh-u)"
+                                style="--d:.24s" />
+                            <path class="wire" pathLength="1" d="M116 488 V548" stroke="#efb141" marker-end="url(#bh-u)"
+                                style="--d:.3s" />
+                            <path class="wire" pathLength="1" d="M116 604 V664" stroke="#efb141" marker-end="url(#bh-u)"
+                                style="--d:.36s" />
+                            <path class="wire" pathLength="1" d="M116 720 V772" stroke="#efb141" style="--d:.44s" />
+
+                            <!-- multivariate -->
+                            <path class="wire" pathLength="1" d="M450 256 V296" stroke="#f0656f" marker-end="url(#bh-m)"
+                                style="--d:.18s" />
+                            <path class="wire" pathLength="1" d="M350 348 H318 a8 8 0 0 0 -8 8 V428" stroke="#f0656f"
+                                marker-end="url(#bh-m)" style="--d:.24s" />
+                            <path class="wire" pathLength="1" d="M450 392 V432" stroke="#f0656f" marker-end="url(#bh-m)"
+                                style="--d:.24s" />
+                            <path class="wire" pathLength="1" d="M550 348 H592 a8 8 0 0 1 8 8 V428" stroke="#f0656f"
+                                marker-end="url(#bh-m)" style="--d:.24s" />
+                            <path class="wire" pathLength="1" d="M600 492 V528" stroke="#f0656f" marker-end="url(#bh-m)"
+                                style="--d:.3s" />
+                            <path class="wire" pathLength="1" d="M516 580 H478 a8 8 0 0 1 -8 -8 V496" stroke="#f0656f"
+                                marker-end="url(#bh-m)" style="--d:.36s" />
+                            <path class="wire" pathLength="1" d="M600 624 V664" stroke="#f0656f" marker-end="url(#bh-m)"
+                                style="--d:.36s" />
+                            <path class="wire" pathLength="1" d="M684 580 H737 a8 8 0 0 1 8 8 V664" stroke="#f0656f"
+                                marker-end="url(#bh-m)" style="--d:.36s" />
+                            <path class="wire" pathLength="1" d="M310 492 V772" stroke="#f0656f" style="--d:.44s" />
+                            <path class="wire" pathLength="1" d="M420 488 V772" stroke="#f0656f" style="--d:.44s" />
+                            <path class="wire" pathLength="1" d="M600 720 V772" stroke="#f0656f" style="--d:.44s" />
+                            <path class="wire" pathLength="1" d="M745 720 V772" stroke="#f0656f" style="--d:.44s" />
+
+                            <!-- exogenous -->
+                            <path class="wire" pathLength="1" d="M910 256 V296" stroke="#cf9ae0" marker-end="url(#bh-x)"
+                                style="--d:.18s" />
+                            <path class="wire" pathLength="1" d="M910 392 V412" stroke="#cf9ae0" marker-end="url(#bh-x)"
+                                style="--d:.24s" />
+                            <path class="wire" pathLength="1" d="M1010 348 H1326 a8 8 0 0 1 8 8 V428" stroke="#cf9ae0"
+                                marker-end="url(#bh-x)" style="--d:.24s" />
+                            <path class="wire" pathLength="1" d="M1010 464 H1082" stroke="#cf9ae0"
+                                marker-end="url(#bh-x)" style="--d:.3s" />
+                            <path class="wire" pathLength="1" d="M910 508 V528" stroke="#cf9ae0" marker-end="url(#bh-x)"
+                                style="--d:.3s" />
+                            <path class="wire" pathLength="1" d="M910 624 V660" stroke="#cf9ae0" marker-end="url(#bh-x)"
+                                style="--d:.36s" />
+                            <path class="wire" pathLength="1" d="M1014 580 H1087 a8 8 0 0 1 8 8 V660" stroke="#cf9ae0"
+                                marker-end="url(#bh-x)" style="--d:.36s" />
+                            <path class="wire" pathLength="1" d="M1334 492 V772" stroke="#cf9ae0" style="--d:.44s" />
+                            <path class="wire" pathLength="1" d="M910 724 V772" stroke="#cf9ae0" style="--d:.44s" />
+                            <path class="wire" pathLength="1" d="M1095 724 V772" stroke="#cf9ae0" style="--d:.44s" />
+
+                            <!-- collection bus -->
+                            <path class="wire" pathLength="1" d="M116 772 H1334" stroke="#f6e2e3" style="--d:.52s" />
+                            <path class="wire" pathLength="1" d="M450 772 V796" stroke="#f6e2e3" marker-end="url(#bh)"
+                                style="--d:.58s" />
+                        </g>
+
+                        <!-- ---------- nodes ---------- -->
+                        <g class="fadein" style="--d:0s">
+                            <path d="M450 40 L566 88 L450 136 L334 88 Z" fill="rgba(246,226,227,.04)" stroke="#f6e2e3"
+                                stroke-width="1.4" />
+                            <text class="n-label" x="450" y="94" font-size="16" text-anchor="middle">Problem
+                                structure</text>
+
+                            <rect x="190" y="66" width="90" height="18" fill="#55131f" />
+                            <text class="a-label" x="195" y="80" font-size="12">Univariate</text>
+
+                            <rect x="458" y="158" width="107" height="18" fill="#55131f" />
+                            <text class="a-label" x="463" y="172" font-size="12">Multivariate</text>
+
+                            <rect x="660" y="66" width="139" height="18" fill="#55131f" />
+                            <text class="a-label" x="665" y="80" font-size="12">Exogenous inputs</text>
+                        </g>
+
+                        <!-- univariate track -->
+                        <g class="fadein" style="--d:.14s">
+                            <rect x="16" y="208" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)"
+                                stroke="#efb141" stroke-width="1.2" />
+                            <text class="n-label" x="116" y="238" font-size="16" text-anchor="middle">Trend and
+                                stationarity</text>
+                        </g>
+                        <g class="fadein" style="--d:.2s">
+                            <rect x="16" y="324" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)"
+                                stroke="#efb141" stroke-width="1.2" />
+                            <text class="n-label" x="116" y="354" font-size="16" text-anchor="middle">Seasonality
+                                checks</text>
+                        </g>
+                        <g class="fadein" style="--d:.26s">
+                            <rect x="16" y="440" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)"
+                                stroke="#efb141" stroke-width="1.2" />
+                            <text class="n-label" x="116" y="470" font-size="16" text-anchor="middle">Variance
+                                diagnostics</text>
+                        </g>
+                        <g class="fadein" style="--d:.32s">
+                            <rect x="16" y="556" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)"
+                                stroke="#efb141" stroke-width="1.2" />
+                            <text class="n-label" x="116" y="586" font-size="16" text-anchor="middle">Breaks and
+                                interventions</text>
+                        </g>
+                        <g class="fadein" style="--d:.38s">
+                            <rect x="16" y="672" width="200" height="48" rx="4" fill="rgba(239,177,65,.07)"
+                                stroke="#efb141" stroke-width="1.2" />
+                            <text class="n-label" x="116" y="702" font-size="16" text-anchor="middle">Special dependence
+                                checks</text>
+                        </g>
+
+                        <!-- multivariate track -->
+                        <g class="fadein" style="--d:.14s">
+                            <rect x="350" y="208" width="200" height="48" rx="4" fill="rgba(240,101,111,.07)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="n-label" x="450" y="238" font-size="16" text-anchor="middle">System
+                                diagnostics</text>
+                        </g>
+                        <g class="fadein" style="--d:.2s">
+                            <path d="M450 304 L550 348 L450 392 L350 348 Z" fill="rgba(240,101,111,.05)"
+                                stroke="#f0656f" stroke-width="1.4" />
+                            <text class="n-label" x="450" y="354" font-size="16" text-anchor="middle">Integration
+                                order?</text>
+
+                            <rect x="268" y="326" width="74" height="18" fill="#55131f" />
+                            <text class="a-label" x="273" y="340" font-size="12">Any I(2)</text>
+
+                            <rect x="458" y="402" width="74" height="18" fill="#55131f" />
+                            <text class="a-label" x="463" y="416" font-size="12">All I(0)</text>
+
+                            <rect x="556" y="326" width="41" height="18" fill="#55131f" />
+                            <text class="a-label" x="561" y="340" font-size="12">I(1)</text>
+                        </g>
+                        <g class="fadein" style="--d:.26s">
+                            <rect x="245" y="436" width="130" height="56" rx="4" fill="rgba(240,101,111,.07)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="n-label" x="310" y="460" font-size="16" text-anchor="middle">I(2) methods
+                                /</text>
+                            <text class="n-label" x="310" y="480" font-size="16" text-anchor="middle">respecify</text>
+                        </g>
+                        <g class="fadein" style="--d:.26s">
+                            <rect x="397" y="440" width="106" height="48" rx="4" fill="rgba(240,101,111,.07)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="n-label" x="450" y="470" font-size="16" text-anchor="middle">Level VAR</text>
+                        </g>
+                        <g class="fadein" style="--d:.26s">
+                            <rect x="535" y="436" width="130" height="56" rx="4" fill="rgba(240,101,111,.07)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="n-label" x="600" y="460" font-size="16" text-anchor="middle">Johansen
+                                rank</text>
+                            <text class="n-label" x="600" y="480" font-size="16" text-anchor="middle">test</text>
+                        </g>
+                        <g class="fadein" style="--d:.32s">
+                            <path d="M600 536 L684 580 L600 624 L516 580 Z" fill="rgba(240,101,111,.05)"
+                                stroke="#f0656f" stroke-width="1.4" />
+                            <text class="n-label" x="600" y="586" font-size="16" text-anchor="middle">Rank r?</text>
+
+                            <rect x="424" y="548" width="49" height="18" fill="#55131f" />
+                            <text class="a-label" x="429" y="562" font-size="12">r = K</text>
+
+                            <rect x="608" y="632" width="49" height="18" fill="#55131f" />
+                            <text class="a-label" x="613" y="646" font-size="12">r = 0</text>
+
+                            <rect x="690" y="552" width="82" height="18" fill="#55131f" />
+                            <text class="a-label" x="695" y="566" font-size="12">0 &lt; r &lt; K</text>
+                        </g>
+                        <g class="fadein" style="--d:.38s">
+                            <rect x="530" y="672" width="140" height="48" rx="4" fill="rgba(240,101,111,.07)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="n-label" x="600" y="702" font-size="16" text-anchor="middle">Differenced
+                                VAR</text>
+                        </g>
+                        <g class="fadein" style="--d:.38s">
+                            <rect x="692" y="672" width="106" height="48" rx="4" fill="rgba(240,101,111,.07)"
+                                stroke="#f0656f" stroke-width="1.2" />
+                            <text class="n-label" x="745" y="702" font-size="16" text-anchor="middle">VECM</text>
+                        </g>
+
+                        <!-- exogenous track -->
+                        <g class="fadein" style="--d:.14s">
+                            <rect x="810" y="208" width="200" height="48" rx="4" fill="rgba(207,154,224,.07)"
+                                stroke="#cf9ae0" stroke-width="1.2" />
+                            <text class="n-label" x="910" y="238" font-size="16" text-anchor="middle">Input-output
+                                diagnostics</text>
+                        </g>
+                        <g class="fadein" style="--d:.2s">
+                            <path d="M910 304 L1010 348 L910 392 L810 348 Z" fill="rgba(207,154,224,.05)"
+                                stroke="#cf9ae0" stroke-width="1.4" />
+                            <text class="n-label" x="910" y="354" font-size="16" text-anchor="middle">Regression
+                                form</text>
+
+                            <rect x="748" y="394" width="148" height="18" fill="#55131f" />
+                            <text class="a-label" x="891" y="408" font-size="12" text-anchor="end">Lagged
+                                regressors</text>
+
+                            <rect x="1032" y="300" width="172" height="18" fill="#55131f" />
+                            <text class="a-label" x="1037" y="314" font-size="12">Regression with ARMA</text>
+                            <rect x="1032" y="318" width="131" height="18" fill="#55131f" />
+                            <text class="a-label" x="1037" y="332" font-size="12">errors / ARIMAX</text>
+                        </g>
+                        <g class="fadein" style="--d:.26s">
+                            <path d="M910 420 L1010 464 L910 508 L810 464 Z" fill="rgba(207,154,224,.05)"
+                                stroke="#cf9ae0" stroke-width="1.4" />
+                            <text class="n-label" x="910" y="470" font-size="16" text-anchor="middle">Any I(2)
+                                variable?</text>
+
+                            <rect x="1034" y="440" width="33" height="18" fill="#55131f" />
+                            <text class="a-label" x="1039" y="454" font-size="12">Yes</text>
+
+                            <rect x="918" y="510" width="25" height="18" fill="#55131f" />
+                            <text class="a-label" x="923" y="524" font-size="12">No</text>
+                        </g>
+                        <g class="fadein" style="--d:.26s">
+                            <rect x="1264" y="436" width="140" height="56" rx="4" fill="rgba(207,154,224,.07)"
+                                stroke="#cf9ae0" stroke-width="1.2" />
+                            <text class="n-label" x="1334" y="460" font-size="16" text-anchor="middle">ARIMAX /
+                                dynamic</text>
+                            <text class="n-label" x="1334" y="480" font-size="16" text-anchor="middle">regression</text>
+                        </g>
+                        <g class="fadein" style="--d:.32s">
+                            <rect x="1090" y="440" width="156" height="48" rx="4" fill="rgba(207,154,224,.05)"
+                                stroke="#cf9ae0" stroke-width="1.2" stroke-dasharray="5 4" />
+                            <text class="n-label" x="1168" y="470" font-size="16" text-anchor="middle">ARDL not
+                                applicable</text>
+                        </g>
+                        <g class="fadein" style="--d:.32s">
+                            <path d="M910 536 L1014 580 L910 624 L806 580 Z" fill="rgba(207,154,224,.05)"
+                                stroke="#cf9ae0" stroke-width="1.4" />
+                            <text class="n-label" x="910" y="574" font-size="16" text-anchor="middle">UECM +</text>
+                            <text class="n-label" x="910" y="594" font-size="16" text-anchor="middle">Bounds test</text>
+
+                            <rect x="760" y="630" width="139" height="18" fill="#55131f" />
+                            <text class="a-label" x="894" y="644" font-size="12" text-anchor="end">Not
+                                cointegrated</text>
+
+                            <rect x="1094" y="632" width="107" height="18" fill="#55131f" />
+                            <text class="a-label" x="1099" y="646" font-size="12">Cointegrated</text>
+                        </g>
+                        <g class="fadein" style="--d:.38s">
+                            <rect x="840" y="668" width="140" height="56" rx="4" fill="rgba(207,154,224,.07)"
+                                stroke="#cf9ae0" stroke-width="1.2" />
+                            <text class="n-label" x="910" y="692" font-size="16" text-anchor="middle">Short-run</text>
+                            <text class="n-label" x="910" y="712" font-size="16" text-anchor="middle">differences</text>
+                        </g>
+                        <g class="fadein" style="--d:.38s">
+                            <rect x="1010" y="668" width="170" height="56" rx="4" fill="rgba(207,154,224,.07)"
+                                stroke="#cf9ae0" stroke-width="1.2" />
+                            <text class="n-label" x="1095" y="692" font-size="16" text-anchor="middle">ARDL long
+                                run</text>
+                            <text class="n-label" x="1095" y="712" font-size="16" text-anchor="middle">+ ECM</text>
+                        </g>
+
+                        <!-- collection -->
+                        <g class="fadein" style="--d:.5s">
+                            <circle cx="450" cy="772" r="4.5" fill="#f6e2e3" />
+                        </g>
+                        <g class="fadein" style="--d:.6s">
+                            <rect x="326" y="804" width="248" height="64" rx="4" fill="rgba(239,177,65,.12)"
+                                stroke="#efb141" stroke-width="1.6" />
+                            <rect x="332" y="810" width="236" height="52" rx="2" fill="none" stroke="#efb141"
+                                stroke-width="0.8" opacity="0.55" />
+                            <text class="n-label" x="450" y="842" font-size="18" text-anchor="middle"
+                                fill="#efb141">Candidate model list</text>
+                        </g>
+
+                        <!-- legend -->
+                        <g class="fadein" style="--d:.68s">
+                            <line x1="16" y1="916" x2="1404" y2="916" stroke="#c9adaf" stroke-width="0.8"
+                                opacity="0.5" />
+                            <text class="lg-label" x="16" y="944">LEGEND</text>
+
+                            <rect x="96" y="935" width="20" height="10" rx="2" fill="rgba(246,226,227,.06)"
+                                stroke="#f6e2e3" stroke-width="1.2" />
+                            <text class="lg-label" x="126" y="944">DIAGNOSTIC STEP</text>
+
+                            <path d="M340 935 L360 940 L340 945 L320 940 Z" fill="none" stroke="#f6e2e3"
+                                stroke-width="1.2" />
+                            <text class="lg-label" x="370" y="944">DECISION</text>
+
+                            <circle cx="520" cy="940" r="4.5" fill="#f6e2e3" />
+                            <text class="lg-label" x="536" y="944">COLLECTION BUS</text>
+
+                            <rect x="740" y="935" width="20" height="10" rx="2" fill="rgba(239,177,65,.12)"
+                                stroke="#efb141" stroke-width="1.4" />
+                            <text class="lg-label" x="770" y="944">SHARED OUTPUT</text>
+
+                            <rect x="972" y="935" width="20" height="10" rx="2" fill="rgba(207,154,224,.05)"
+                                stroke="#cf9ae0" stroke-width="1.2" stroke-dasharray="5 4" />
+                            <text class="lg-label" x="1002" y="944">DEAD END</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="notes">
+                <ul>
+                    <li>
+                        <strong>Trend and stationarity</strong>
+                        ADF, PP, KPSS, break-point unit-root tests
+                    </li>
+                    <li>
+                        <strong>Seasonality</strong>
+                        seasonal dummies, seasonal plots, seasonal unit-root
+                        tests
+                    </li>
+                    <li>
+                        <strong>Variance</strong>
+                        log/Box-Cox, ARCH-LM, squared residual checks
+                    </li>
+                    <li>
+                        <strong>Breaks and interventions</strong>
+                        Chow, Zivot-Andrews, Bai-Perron, intervention dummies
+                    </li>
+                    <li>
+                        <strong>Special dependence</strong>
+                        long memory, threshold effects, regime changes,
+                        nonlinear dynamics
+                    </li>
+                    <li>
+                        <strong>Input-output diagnostics</strong>
+                        lag inspection, prewhitened Cross-Correlation
+                        Function (CCF), intervention and transfer effects
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ============================= SHEET 03 ============================= -->
+        <section class="sec">
+            <div class="sec-head">
+                <h2>Model Family Selection</h2>
+            </div>
+
+            <div class="schedule">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Condition</th>
+                            <th scope="col">Candidate models</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Stationary linear</td>
+                            <td>AR / MA / ARMA</td>
+                        </tr>
+                        <tr>
+                            <td>Trend / nonstationary</td>
+                            <td>ARIMA</td>
+                        </tr>
+                        <tr>
+                            <td>Seasonal</td>
+                            <td>SARIMA / ETS</td>
+                        </tr>
+                        <tr>
+                            <td>Multiple seasonality</td>
+                            <td>TBATS / BATS / MSTL</td>
+                        </tr>
+                        <tr>
+                            <td>Exogenous inputs</td>
+                            <td>ARDL / ARIMAX</td>
+                        </tr>
+                        <tr>
+                            <td>Multivariate</td>
+                            <td>VAR / VECM</td>
+                        </tr>
+                        <tr>
+                            <td>Changing variance</td>
+                            <td>
+                                ARCH / GARCH / stochastic volatility /
+                                Generalized Autoregressive Score (GAS)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Long memory</td>
+                            <td>ARFIMA / FIGARCH</td>
+                        </tr>
+                        <tr>
+                            <td>Nonlinear / regime</td>
+                            <td>TAR / SETAR / STAR / Markov switching</td>
+                        </tr>
+                        <tr>
+                            <td>Nonlinear ML</td>
+                            <td>Neural network autoregression (NNAR)</td>
+                        </tr>
+                        <tr>
+                            <td>Latent components / unobserved states</td>
+                            <td>
+                                State-space / structural time series /
+                                Kalman filter
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mixed frequency</td>
+                            <td>MIDAS</td>
+                        </tr>
+                        <tr>
+                            <td>Intermittent demand</td>
+                            <td>Croston's method / TSB</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="foot-inner">
+            <p class="eyebrow">Contact</p>
+            <p class="foot-name">Murat Koptur</p>
+            <div class="foot-links">
+                <a href="https://www.linkedin.com/in/muratkoptur/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://muratkoptur.com" target="_blank" rel="noopener noreferrer">muratkoptur.com</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            document.querySelectorAll(".canvas").forEach(function (c) {
+                var over = c.scrollWidth - c.clientWidth;
+                if (over > 0) {
+                    c.scrollLeft = over / 2;
                 }
-                window.addEventListener("beforeprint", settle);
-                if (window.matchMedia) {
-                    var mq = window.matchMedia("print");
-                    if (mq.addEventListener) {
-                        mq.addEventListener("change", function (e) {
-                            if (e.matches) settle();
-                        });
-                    }
-                }
+            });
 
-                var btn = document.getElementById("printbtn");
-                if (btn) {
-                    btn.addEventListener("click", function () {
-                        settle();
-                        window.print();
-                    });
-                }
+            var plates = document.querySelectorAll(".reveal");
 
-                if (!("IntersectionObserver" in window)) {
-                    plates.forEach(function (p) {
-                        p.classList.add("in");
-                    });
-                    return;
-                }
-                var io = new IntersectionObserver(
-                    function (entries) {
-                        entries.forEach(function (e) {
-                            if (e.isIntersecting) {
-                                e.target.classList.add("in");
-                                io.unobserve(e.target);
-                            }
-                        });
-                    },
-                    { rootMargin: "0px 0px -12% 0px", threshold: 0.06 },
-                );
+            // printing must never catch a drawing mid-draw
+            function settle() {
                 plates.forEach(function (p) {
-                    io.observe(p);
+                    p.classList.add("in");
                 });
-            })();
-        </script>
-    </body>
+            }
+            window.addEventListener("beforeprint", settle);
+            if (window.matchMedia) {
+                var mq = window.matchMedia("print");
+                if (mq.addEventListener) {
+                    mq.addEventListener("change", function (e) {
+                        if (e.matches) settle();
+                    });
+                }
+            }
+
+            var btn = document.getElementById("printbtn");
+            if (btn) {
+                btn.addEventListener("click", function () {
+                    settle();
+                    window.print();
+                });
+            }
+
+            if (!("IntersectionObserver" in window)) {
+                plates.forEach(function (p) {
+                    p.classList.add("in");
+                });
+                return;
+            }
+            var io = new IntersectionObserver(
+                function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) {
+                            e.target.classList.add("in");
+                            io.unobserve(e.target);
+                        }
+                    });
+                },
+                { rootMargin: "0px 0px -12% 0px", threshold: 0.06 },
+            );
+            plates.forEach(function (p) {
+                io.observe(p);
+            });
+        })();
+    </script>
+</body>
+
 </html>
